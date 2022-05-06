@@ -1,0 +1,43 @@
+db:
+  scripts:
+#    - conf/init.sql
+#  ip: 127.0.0.1
+#  password: 123456
+#  database: fortune
+app:
+  mode: dev
+#  jwt:
+#    key: fortune
+#    expire: 3600
+  resps:
+    - name: fault
+      errcode: 1000
+      errmsg: 系统故障
+    - name: loginFailed
+      errcode: 1001
+      errmsg: 登陆失败
+server:
+  port: 8701
+logs:
+  - level: debug
+    format: text
+    outType: console
+  #    disabled: true
+  - level: info
+    format: json
+    outType: file
+    #    outDir: log/info
+    #    maxAge: 10
+    maxCount: 10
+    #    singleLevel: false
+    disabled: true
+  - level: warn
+    format: json
+    outType: file
+    #    outDir: log/info
+    #    maxAge: 10
+    maxCount: 10
+    #    singleLevel: false
+    disabled: true
+#frontend:
+#  dist: frontend/dist

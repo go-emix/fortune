@@ -1,0 +1,7 @@
+.idea
+.vscode
+go.sum
+log
+frontend/.vscode
+frontend/node_modules
+frontend/package-lock.json
