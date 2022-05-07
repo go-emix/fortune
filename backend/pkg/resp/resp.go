@@ -8,12 +8,13 @@ import (
 type Resp struct {
 	ErrCode int         `json:"errcode"`
 	ErrMsg  string      `json:"errmsg,omitempty"`
+	Reason  string      `json:"reason,omitempty"`
 	Data    interface{} `json:"data,omitempty"`
 }
 
-func (r Resp) SetError(err error) Resp {
+func (r Resp) SetReason(err error) Resp {
 	if err != nil {
-		r.ErrMsg += ",reason: " + err.Error()
+		r.Reason = err.Error()
 	}
 	return r
 }

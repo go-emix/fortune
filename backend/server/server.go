@@ -32,7 +32,10 @@ func NewServer(port int, frontDist string) *Server {
 	ser := &Server{port: port, eng: gin.New()}
 	ser.killChan = make(chan os.Signal)
 	ser.eng.Use(gin.Recovery())
-	ser.eng.Use(cors.Default())
+	corsConf := cors.DefaultConfig()
+	corsConf.AllowAllOrigins = true
+	corsConf.AddAllowHeaders("token")
+	ser.eng.Use(cors.New(corsConf))
 	if frontDist != "" {
 		ser.eng.GET("", func(c *gin.Context) {
 			file, err := os.ReadFile(frontDist + "/index.html")

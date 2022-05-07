@@ -1,19 +1,30 @@
 <script setup>
 import {ref} from 'vue'
-import ax, {handleError} from '../pkg/axios'
+import ax from '../pkg/axios'
+import Cookies from "js-cookie";
+import {Nerr, Nsucc} from '../pkg/notify'
 
 let form = ref({})
 
-function login() {
-  ax.post('system/login', form.value)
-      .then(function (response) {
-        if (response.data.errcode === 0) {
-          alert("succ")
-        } else {
-          alert(response.data.errmsg)
-        }
-      })
-      .catch(handleError);
+async function login() {
+  if (!form.value.username) {
+    Nerr("用户名不能为空")
+    return
+  }
+  if (!form.value.password) {
+    Nerr("密码不能为空")
+    return
+  }
+  let da = await ax({
+    url: "system/login",
+    method: "post",
+    data: form.value
+  })
+  if (!da) {
+    return
+  }
+  Cookies.set("token", da.token)
+  Nsucc("welcom " + da.nickname)
 }
 
 </script>

@@ -17,7 +17,7 @@ func run() *cobra.Command {
 		Short: "run server,default port " + strconv.Itoa(config.ServerC.Port),
 	}
 	cmd.Flags().IntVarP(&config.ServerC.Port, "port", "p",
-		0, "server port")
+		config.ServerC.Port, "server port")
 	cmd.Flags().StringVarP(&cf, "conf", "c",
 		"", "config file")
 	cmd.Run = func(cmd *cobra.Command, _ []string) {

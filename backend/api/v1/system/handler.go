@@ -11,12 +11,12 @@ func Login(c *gin.Context) {
 	var pa system.LoginParam
 	err := c.ShouldBindJSON(&pa)
 	if err != nil {
-		resp.Err(c, common.Resps["fault"].SetError(err))
+		resp.Err(c, common.Resps["fault"].SetReason(err))
 		return
 	}
 	succ, err := system.Login(pa)
 	if err != nil {
-		resp.Err(c, common.Resps["loginFailed"].SetError(err))
+		resp.Err(c, common.Resps["loginFailed"].SetReason(err))
 		return
 	}
 	resp.Data(c, succ)

@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/go-emix/fortune/backend/pkg/resp"
 	"github.com/go-emix/fortune/version"
+	"github.com/go-emix/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"os"
@@ -55,7 +56,7 @@ func init() {
 	DbC.Database = version.Name
 	DbC.Password = "123456"
 	DbC.Scripts = []string{}
-	ServerC.Port = 8080
+	ServerC.Port = 3678
 	AppC.Mode = Dev
 	AppC.Resps = make(map[string]resp.Resp)
 	AppC.Jwt.SignKey = version.Name
@@ -86,6 +87,9 @@ func ExeSql() {
 		}
 	}()
 	for _, sf := range DbC.Scripts {
+		if !utils.FileIsExist(sf) {
+			continue
+		}
 		file, err := os.ReadFile(sf)
 		if err != nil {
 			panic(err)
