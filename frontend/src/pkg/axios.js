@@ -1,6 +1,9 @@
 import ax from 'axios'
 import Cookies from "js-cookie";
 import {Nerr, Nsucc} from './notify'
+import i18n from './i18n'
+
+const t = i18n.global.t
 
 const env = import.meta.env
 
@@ -23,7 +26,7 @@ instance.interceptors.request.use(function (config) {
 instance.interceptors.response.use(function (resp) {
     let data = resp.data
     if (!data) {
-        Nerr("请求失败")
+        Nerr(t("req_failed"))
         return
     }
     let code = data.errcode
@@ -40,7 +43,7 @@ instance.interceptors.response.use(function (resp) {
         return Promise.resolve(msg)
     }
 }, function () {
-    Nerr("服务器连接异常")
+    Nerr(t("server_not_connected"))
 })
 
 export default instance
@@ -54,5 +57,7 @@ function handleErr(errcode, reason) {
         case 1001:
             Nerr(reason)
             break
+        default:
+            Nerr(errcode)
     }
 }
