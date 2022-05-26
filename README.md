@@ -6,4 +6,8 @@
 
 git clone https://github.com/go-emix/fortune.git
 
-go install github.com/go-emix/fortune@latest
+cd fortune
+
+go get
+
+go install
