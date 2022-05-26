@@ -4,12 +4,12 @@ db:
 app:
   mode: prod
   resps:
-    - name: fault
+    - name: system_fault
       errcode: 1000
-      errmsg: 系统故障
-    - name: loginFailed
+    - name: user_not_exist
       errcode: 1001
-      errmsg: 登陆失败
+    - name: password_error
+      errcode: 1002
 logs:
   - level: debug
     format: text

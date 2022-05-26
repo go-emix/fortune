@@ -10,12 +10,13 @@ app:
     key: fortune
     expire: 3600
   resps:
-    - name: fault
+    - name: system_fault
       errcode: 1000
-      errmsg: 系统故障
-    - name: loginFailed
+    - name: user_not_exist
       errcode: 1001
-      errmsg: 登陆失败
+    - name: password_error
+      errcode: 1002
+  i18n: conf/i18n
 server:
   port: 3678
 logs:

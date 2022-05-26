@@ -8,18 +8,10 @@ import (
 type Resp struct {
 	ErrCode int         `json:"errcode"`
 	ErrMsg  string      `json:"errmsg,omitempty"`
-	Reason  string      `json:"reason,omitempty"`
 	Data    interface{} `json:"data,omitempty"`
 }
 
-func (r Resp) SetReason(err error) Resp {
-	if err != nil {
-		r.Reason = err.Error()
-	}
-	return r
-}
-
-func Success(c *gin.Context) {
+func Succ(c *gin.Context) {
 	c.AbortWithStatusJSON(http.StatusOK, Resp{
 		ErrCode: 0,
 		ErrMsg:  "success",

@@ -9,15 +9,15 @@ const env = import.meta.env
 
 let instance = ax.create({
     baseURL: env.VITE_API_PATH,
-    timeout: 2000,
+    timeout: 2500,
 })
-
 
 instance.interceptors.request.use(function (config) {
     let to = Cookies.get("token")
     if (to) {
         config.headers["token"] = to
     }
+    config.headers["lang"] = String(i18n.global.locale)
     return config
 }, function (error) {
     Nerr(error)
@@ -31,7 +31,7 @@ instance.interceptors.response.use(function (resp) {
     }
     let code = data.errcode
     if (code !== 0) {
-        handleErr(code, data.reason)
+        Nerr(code + " : " + data.errmsg)
         return
     }
     let rdata = data.data
@@ -47,17 +47,3 @@ instance.interceptors.response.use(function (resp) {
 })
 
 export default instance
-
-
-function handleErr(errcode, reason) {
-    switch (errcode) {
-        case 1000:
-            Nerr(reason)
-            break
-        case 1001:
-            Nerr(reason)
-            break
-        default:
-            Nerr(errcode)
-    }
-}

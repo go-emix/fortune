@@ -31,6 +31,7 @@ type App struct {
 	Mode  Mode
 	Resps map[string]resp.Resp
 	Jwt   Jwt
+	I18n  string
 }
 
 type Jwt struct {
@@ -61,6 +62,7 @@ func init() {
 	AppC.Resps = make(map[string]resp.Resp)
 	AppC.Jwt.SignKey = version.Name
 	AppC.Jwt.Expire = 3600
+	AppC.I18n = "conf/i18n"
 	FrontendC.Dist = "frontend/dist"
 }
 

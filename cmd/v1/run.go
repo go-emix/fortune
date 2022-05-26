@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/go-emix/fortune/backend/pkg/common"
+	"github.com/go-emix/fortune/backend/pkg/i18n"
 	"github.com/go-emix/fortune/backend/pkg/jwt"
 	"github.com/go-emix/fortune/backend/server"
 	"github.com/go-emix/fortune/backend/service"
@@ -30,6 +31,11 @@ func run() *cobra.Command {
 		common.Resps = config.AppC.Resps
 		common.DB = config.GetDb()
 		jwt.Initialize(config.AppC.Jwt.SignKey, config.AppC.Jwt.Expire)
+		err = i18n.Initialize(config.AppC.I18n)
+		if err != nil {
+			cmd.Println(err.Error())
+			return
+		}
 		err = service.Migrate()
 		if err != nil {
 			cmd.Println(err.Error())

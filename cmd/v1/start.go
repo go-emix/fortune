@@ -135,9 +135,7 @@ func loadConfig() error {
 			} else {
 				rp.ErrCode = m["errcode"].(int)
 			}
-			if m["errmsg"] == nil {
-				return errors.New("errmsg not empty")
-			} else {
+			if m["errmsg"] != nil {
 				rp.ErrMsg = m["errmsg"].(string)
 			}
 			if m["name"] == nil {
@@ -155,6 +153,10 @@ func loadConfig() error {
 	signKey := viper.GetString("app.jwt.key")
 	if signKey != "" {
 		config.AppC.Jwt.SignKey = signKey
+	}
+	i18n := viper.GetString("app.i18n")
+	if i18n != "" {
+		config.AppC.I18n = i18n
 	}
 	return nil
 }

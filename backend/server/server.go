@@ -34,7 +34,7 @@ func NewServer(port int, frontDist string) *Server {
 	ser.eng.Use(gin.Recovery())
 	corsConf := cors.DefaultConfig()
 	corsConf.AllowAllOrigins = true
-	corsConf.AddAllowHeaders("token")
+	corsConf.AddAllowHeaders("token", "lang")
 	ser.eng.Use(cors.New(corsConf))
 	if frontDist != "" {
 		ser.eng.GET("", func(c *gin.Context) {
