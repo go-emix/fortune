@@ -10,4 +10,6 @@ cd fortune
 
 go get
 
-go install
+go build
+
+fortune run
