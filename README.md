@@ -13,3 +13,5 @@ go get
 go build
 
 fortune run
+
+visit http://localhost:3678
