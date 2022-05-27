@@ -1,4 +1,5 @@
 import {createI18n} from 'vue-i18n'
+import {getState} from "./session";
 
 import en from '../i18n/en'
 import zh from '../i18n/zh'
@@ -14,8 +15,19 @@ export const langs = [
     },
 ]
 
+function getLocale() {
+    let state = getState();
+    if (!state) {
+        return 'zh'
+    }
+    if (state.i18n) {
+        return state.i18n
+    }
+    return 'zh'
+}
+
 export default createI18n({
-    locale: 'zh',
+    locale: getLocale(),
     messages: {
         en,
         zh

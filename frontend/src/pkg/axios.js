@@ -1,7 +1,7 @@
 import ax from 'axios'
-import Cookies from "js-cookie";
 import {Nerr, Nsucc} from './notify'
 import i18n from './i18n'
+import {getState} from "./session";
 
 const t = i18n.global.t
 
@@ -13,9 +13,9 @@ let instance = ax.create({
 })
 
 instance.interceptors.request.use(function (config) {
-    let to = Cookies.get("token")
-    if (to) {
-        config.headers["token"] = to
+    let state = getState();
+    if (state) {
+        config.headers["token"] = state.token
     }
     config.headers["lang"] = String(i18n.global.locale)
     return config

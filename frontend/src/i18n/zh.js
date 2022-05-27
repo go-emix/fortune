@@ -8,6 +8,9 @@ const zh = {
     not_empty: "不能为空",
     req_failed: "请求失败",
     server_not_connected: "服务器连接中断",
+    dashboard: "仪表盘",
+    not_found: "页面未发现",
+    exit: "退出"
 }
 
 export default zh
