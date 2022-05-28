@@ -4,6 +4,7 @@ on:
   push:
     paths-ignore:
       - docker-compose.yml
+      - .env
 
 jobs:
   build:
