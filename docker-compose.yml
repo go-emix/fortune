@@ -1,0 +1,20 @@
+services:
+  db:
+    image: mysql/mysql-server
+    container_name: ${project_name}_mysql
+    environment:
+      - MYSQL_DATABASE=${project_name}
+      - MYSQL_ROOT_PASSWORD=${db_pass}
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+  backend:
+    image: ${project_name}
+    container_name: ${project_name}_backend
+    environment:
+      - GIN_MODE=release
+    command:
+      run
+    ports:
+      - 8081:8080
+    depends_on:
+      - db
