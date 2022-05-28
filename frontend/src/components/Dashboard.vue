@@ -3,10 +3,12 @@ import {useI18n} from 'vue-i18n'
 import {langs} from '../pkg/i18n'
 import {clearState, saveState} from "../pkg/session"
 import {useRouter} from "vue-router"
+import Left from './Left.vue'
 
 const {t, locale} = useI18n()
 
 const router = useRouter();
+
 
 function syncI18n(va) {
     saveState({i18n: va})
@@ -20,6 +22,7 @@ function exit() {
 </script>
 
 <template>
+    <Left></Left>
     <div>{{ t("dashboard") }}</div>
     <el-select v-model="locale" @change="syncI18n">
         <el-option

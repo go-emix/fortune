@@ -15,6 +15,9 @@ export function saveState(obj) {
             case "i18n":
                 state.i18n = value
                 break
+            case "permit":
+                state.permit = value
+                break
         }
     }
     Cookies.set("state", JSON.stringify(state))

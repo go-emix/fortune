@@ -8,9 +8,12 @@ const en = {
     not_empty: "not empty",
     req_failed: "request failed",
     server_not_connected: "server not connected",
-    dashboard: "dashboard",
+    dashboard: "Dashboard",
     not_found: "not found",
-    exit: "exit"
+    exit: "exit",
+    not_permit: "not permit",
+    system_admin: "System admin",
+    admin: "Admin"
 }
 
 export default en

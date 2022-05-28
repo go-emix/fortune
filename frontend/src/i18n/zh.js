@@ -10,7 +10,10 @@ const zh = {
     server_not_connected: "服务器连接中断",
     dashboard: "仪表盘",
     not_found: "页面未发现",
-    exit: "退出"
+    exit: "退出",
+    not_permit: "没有权限",
+    system_admin: "系统管理",
+    admin: "管理员"
 }
 
 export default zh

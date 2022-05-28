@@ -8,9 +8,13 @@ export function isLogin() {
     return true
 }
 
-export function isPass() {
-    if (!isLogin()) {
-        return false
+export function isPermit(to) {
+    let state = getState();
+    for (let i = 0; i < state.permit.length; i++) {
+        let p = state.permit[i];
+        if (p === "*" || p === to) {
+            return true
+        }
     }
-    return true
+    return false
 }

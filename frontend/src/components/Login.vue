@@ -34,7 +34,7 @@ async function login() {
     if (!da) {
         return
     }
-    saveState({token: da.token})
+    saveState({token: da.token, permit: ["*"]})
     let msg = da.nickname
     if (locale.value === "en") {
         msg = da.username

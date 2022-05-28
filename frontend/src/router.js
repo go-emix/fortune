@@ -2,7 +2,12 @@ import {createRouter, createWebHashHistory, createWebHistory} from "vue-router"
 import Dashboard from './components/Dashboard.vue'
 import Login from './components/Login.vue'
 import NotFound from './components/NotFound.vue'
-import {isLogin} from "./auth";
+import Admin from './components/Admin.vue'
+import {isLogin, isPermit} from "./auth"
+import {Nerr} from "./pkg/notify"
+import i18n from "./pkg/i18n"
+
+const t = i18n.global.t
 
 const routes = [
     {
@@ -10,7 +15,15 @@ const routes = [
         component: Dashboard,
         path: '/',
         meta: {
-            auth: isLogin
+            auth: "login"
+        }
+    },
+    {
+        name: 'admin',
+        component: Admin,
+        path: '/admin',
+        meta: {
+            auth: "admin"
         }
     },
     {
@@ -34,13 +47,21 @@ const router = createRouter({
 });
 
 router.beforeEach(function (to, from, next) {
-    if (to.meta.auth) {
-        let au = to.meta.auth()
-        if (!au) {
-            next({name: "login"})
-        } else {
-            next()
-        }
+    let au = to.meta.auth
+    if (!au) {
+        next()
+        return
+    }
+    if (!isLogin()) {
+        next({name: "login"})
+        return
+    }
+    if (au === "login") {
+        next()
+        return
+    }
+    if (!isPermit(au)) {
+        Nerr(t("not_permit"))
         return
     }
     next()
