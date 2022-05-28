@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from "vue-router"
+import {createRouter, createWebHashHistory, createWebHistory} from "vue-router"
 import Dashboard from './components/Dashboard.vue'
 import Login from './components/Login.vue'
 import NotFound from './components/NotFound.vue'
@@ -21,8 +21,15 @@ const routes = [
     {path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound},
 ]
 
+function routerHistory() {
+    if (import.meta.env.DEV) {
+        return createWebHistory()
+    }
+    return createWebHashHistory()
+}
+
 const router = createRouter({
-    history: createWebHistory(),
+    history: routerHistory(),
     routes,
 });
 
