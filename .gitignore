@@ -5,4 +5,5 @@ log
 frontend/.vscode
 frontend/node_modules
 frontend/package-lock.json
+frontend/.env.production
 docker
