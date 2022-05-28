@@ -1,0 +1,8 @@
+.idea
+.github
+.gitignore
+*.md
+docker-compose.yml
+frontend
+!frontend/dist
+docker

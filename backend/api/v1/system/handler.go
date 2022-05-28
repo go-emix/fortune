@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-emix/fortune/backend/pkg/i18n"
 	"github.com/go-emix/fortune/backend/pkg/resp"
+	"github.com/go-emix/fortune/backend/pkg/tianqi"
 	"github.com/go-emix/fortune/backend/service/system"
 )
 
@@ -20,4 +21,16 @@ func Login(c *gin.Context) {
 		return
 	}
 	resp.Data(c, succ)
+}
+
+func Tianqi(c *gin.Context) {
+	temp, err := tianqi.GetTemp()
+	if err != nil {
+		resp.Err(c, resp.Resp{
+			ErrCode: 2001,
+			ErrMsg:  err.Error(),
+		})
+		return
+	}
+	resp.Data(c, temp)
 }

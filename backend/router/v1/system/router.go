@@ -8,4 +8,5 @@ import (
 func Register(r gin.IRouter) {
 	gr := r.Group("system")
 	gr.POST("login", system.Login)
+	gr.GET("tq", system.Tianqi)
 }

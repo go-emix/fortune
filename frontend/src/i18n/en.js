@@ -13,7 +13,8 @@ const en = {
     exit: "exit",
     not_permit: "not permit",
     system_admin: "System admin",
-    admin: "Admin"
+    admin: "Admin",
+    tq: "weather"
 }
 
 export default en

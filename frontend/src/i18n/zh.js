@@ -13,7 +13,8 @@ const zh = {
     exit: "退出",
     not_permit: "没有权限",
     system_admin: "系统管理",
-    admin: "管理员"
+    admin: "管理员",
+    tq: "天气"
 }
 
 export default zh

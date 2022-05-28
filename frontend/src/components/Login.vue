@@ -43,6 +43,16 @@ async function login() {
     Nsucc(t("welcome") + " " + msg)
 }
 
+async function tq() {
+    let da = await ax({
+        url: "system/tq",
+    })
+    if (!da) {
+        return
+    }
+    Nsucc(da)
+}
+
 </script>
 
 <template>
@@ -66,6 +76,7 @@ async function login() {
             :value="item.i18n">
         </el-option>
     </el-select>
+    <el-button @click="tq">{{ t("tq") }}</el-button>
 
 </template>
 
