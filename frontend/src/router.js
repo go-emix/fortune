@@ -41,6 +41,7 @@ router.beforeEach(function (to, from, next) {
         } else {
             next()
         }
+        return
     }
     next()
 })
