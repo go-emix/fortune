@@ -4,14 +4,12 @@
 
 ### 后台管理系统
 
+```shell
 git clone https://github.com/go-emix/fortune.git
-
-cd fortune
-
-go get
-
-go build
-
-fortune run
+cd shell
+chmod +x build.sh
+./build.sh
+./fortune run
+```
 
 visit http://localhost:3678

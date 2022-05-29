@@ -17,6 +17,7 @@ function syncI18n(va) {
 function exit() {
     clearState()
     router.push({name: "login"})
+    location.reload()
 }
 
 </script>
