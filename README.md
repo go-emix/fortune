@@ -6,10 +6,9 @@
 
 ```shell
 git clone https://github.com/go-emix/fortune.git
-cd shell
-chmod +x build.sh
+cd shell && chmod +x build.sh
 ./build.sh
-./fortune run
+cd ../ && ./fortune run
 ```
 
 visit http://localhost:3678
