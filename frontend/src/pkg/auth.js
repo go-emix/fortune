@@ -1,4 +1,4 @@
-import {getState} from "./pkg/session"
+import {getState} from "./session"
 
 export function isLogin() {
     let state = getState();

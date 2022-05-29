@@ -23,7 +23,10 @@ function select(k) {
         <el-menu-item index="dashboard">
             <span slot="title">{{ t("dashboard") }}</span>
         </el-menu-item>
-        <el-sub-menu index="">
+        <el-sub-menu index="sys">
+            <template v-slot:title>
+                <span>{{ t("system_admin") }}</span>
+            </template>
             <el-menu-item index="admin">
                 {{ t("admin") }}
             </el-menu-item>
