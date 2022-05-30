@@ -4,35 +4,12 @@ let da = []
 
 async function init() {
     da = await ax({
-        url: "system/menu",
+        url: "system/menus",
     })
 }
 
-init()
+await init()
 
-da = [
-    {
-        name: 'dashboard',
-        component: "dashboard",
-        path: '/',
-        meta: {
-            auth: "login"
-        }
-    },
-    {
-        name: 'admin',
-        component: "admin",
-        path: '/admin',
-        meta: {
-            auth: "admin",
-            parent: "sys"
-        }
-    },
-    {
-        name: 'login',
-        component: "login",
-        path: '/login'
-    },
-]
+console.log(da)
 
 export const menu = da

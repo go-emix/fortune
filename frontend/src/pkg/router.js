@@ -13,21 +13,26 @@ function toVueComponent(com) {
     switch (com) {
         case "admin":
             return Admin
-        case "login":
-            return Login
         case "dashboard":
             return Dashboard
     }
+    return undefined
 }
 
 const routes = [
+    {name: "login", path: "/login", component: Login},
     {path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound},
 ]
 
 for (let i = 0; i < menu.length; i++) {
-    menu[i].component = toVueComponent(menu[i].component)
-    routes.push(menu[i])
+    let vc = toVueComponent(menu[i].component)
+    if (vc) {
+        menu[i].component = vc
+        routes.push(menu[i])
+    }
 }
+
+console.log(routes)
 
 const t = i18n.global.t
 
