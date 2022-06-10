@@ -66,3 +66,23 @@ type UserRole struct {
 func (UserRole) TableName() string {
 	return "user_role"
 }
+
+type Api struct {
+	Id   int
+	Name string
+	Path string
+}
+
+func (Api) TableName() string {
+	return "api"
+}
+
+type RoleApi struct {
+	Id   int
+	Role int
+	Api  int
+}
+
+func (RoleApi) TableName() string {
+	return "role_api"
+}

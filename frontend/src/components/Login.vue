@@ -6,6 +6,7 @@ import {useI18n} from 'vue-i18n'
 import {langs} from '../pkg/i18n'
 import {saveState} from "../pkg/session"
 import {useRouter} from 'vue-router'
+import menu from '../pkg/menu'
 
 const {t, locale} = useI18n()
 
@@ -39,6 +40,7 @@ async function login() {
     if (locale.value === "en") {
         msg = da.username
     }
+    await menu(router)
     await router.push({name: "dashboard"})
     Nsucc(t("welcome") + " " + msg)
 }

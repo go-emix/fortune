@@ -1,3 +1,5 @@
 system_fault = "system fault"
 user_not_exist = "user not exist"
 password_error = "password error"
+not_login = "not login"
+permission_denied = "permission denied"

@@ -81,6 +81,11 @@ func Menus(uid int) (rm []Menu, err error) {
 	return
 }
 
+func MenuList() (rm []Menu, err error) {
+	err = common.DB.Model(Menu{}).Find(&rm).Error
+	return
+}
+
 func Migrate() error {
 	// admin init
 	emlogrus.Info("migrate admin init")
@@ -108,15 +113,6 @@ func Migrate() error {
 		return err
 	}
 	login := "login"
-	//loginMenu := Menu{
-	//	Name:      login,
-	//	Path:      "/" + login,
-	//	Component: login,
-	//}
-	//create := common.DB.FirstOrCreate(&loginMenu, Menu{Name: login})
-	//if loginMenu.Id == 0 {
-	//	return create.Error
-	//}
 	dashboard := "dashboard"
 	dashboardMenu := Menu{
 		Name:      dashboard,
@@ -198,6 +194,18 @@ func Migrate() error {
 	create = common.DB.FirstOrCreate(&userRootRole, userRootRole)
 	if userRootRole.Id == 0 {
 		return create.Error
+	}
+	// api init
+	emlogrus.Info("migrate api init")
+	err = common.DB.AutoMigrate(Api{})
+	if err != nil {
+		return err
+	}
+	// role_api init
+	emlogrus.Info("migrate role_api init")
+	err = common.DB.AutoMigrate(RoleApi{})
+	if err != nil {
+		return err
 	}
 	return nil
 }

@@ -1,38 +1,8 @@
 import {createRouter, createWebHashHistory, createWebHistory} from "vue-router"
-import Dashboard from '../components/Dashboard.vue'
-import Login from '../components/Login.vue'
-import NotFound from '../components/NotFound.vue'
-import Admin from '../components/Admin.vue'
 import {isLogin, isPermit} from "./auth"
 import {Nerr} from "./notify"
 import i18n from "./i18n"
-import {menu} from './menu'
-
-
-function toVueComponent(com) {
-    switch (com) {
-        case "admin":
-            return Admin
-        case "dashboard":
-            return Dashboard
-    }
-    return undefined
-}
-
-const routes = [
-    {name: "login", path: "/login", component: Login},
-    {path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound},
-]
-
-for (let i = 0; i < menu.length; i++) {
-    let vc = toVueComponent(menu[i].component)
-    if (vc) {
-        menu[i].component = vc
-        routes.push(menu[i])
-    }
-}
-
-console.log(routes)
+import menu from './menu'
 
 const t = i18n.global.t
 
@@ -45,8 +15,10 @@ function routerHistory() {
 
 const router = createRouter({
     history: routerHistory(),
-    routes,
+    routes: []
 });
+
+await menu(router)
 
 router.beforeEach(function (to, from, next) {
     let au = to.meta.auth

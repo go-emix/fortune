@@ -9,5 +9,6 @@ func Register(r gin.IRouter) {
 	gr := r.Group("system")
 	gr.POST("login", system.Login)
 	gr.GET("tq", system.Tianqi)
-	gr.GET("menus", system.Menus)
+	gr.GET("menus", system.LoginInterceptor, system.Menus)
+	gr.GET("menuList", system.LoginInterceptor, system.MenuList)
 }

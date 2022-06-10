@@ -3,7 +3,6 @@ package system
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-emix/fortune/backend/pkg/i18n"
-	"github.com/go-emix/fortune/backend/pkg/jwt"
 	"github.com/go-emix/fortune/backend/pkg/resp"
 	"github.com/go-emix/fortune/backend/pkg/tianqi"
 	"github.com/go-emix/fortune/backend/service/system"
@@ -25,13 +24,16 @@ func Login(c *gin.Context) {
 }
 
 func Menus(c *gin.Context) {
-	header := c.GetHeader("token")
-	token, err := jwt.ParseToken(header)
+	menus, err := system.Menus(getUid(c))
 	if err != nil {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
 		return
 	}
-	menus, err := system.Menus(token.UserId)
+	resp.Data(c, menus)
+}
+
+func MenuList(c *gin.Context) {
+	menus, err := system.MenuList()
 	if err != nil {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
 		return
