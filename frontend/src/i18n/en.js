@@ -14,7 +14,8 @@ const en = {
     not_permit: "not permit",
     system_admin: "System admin",
     admin: "Admin",
-    tq: "weather"
+    tq: "weather",
+    menu: "Menu"
 }
 
 export default en

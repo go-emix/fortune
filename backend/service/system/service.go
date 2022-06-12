@@ -56,7 +56,7 @@ func Menus(uid int) (rm []Menu, err error) {
 	}
 	for _, r := range roles {
 		menus := make([]Menu, 0)
-		err = common.DB.Model(Menu{}).Joins("left join role_menu on "+
+		err = common.DB.Model(Menu{}).Joins("right join role_menu on "+
 			"menu.id=role_menu.menu and role_menu.role=?", r).
 			Find(&menus).Error
 		if err != nil {

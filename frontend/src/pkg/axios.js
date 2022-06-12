@@ -1,7 +1,7 @@
 import ax from 'axios'
 import {Nerr, Nsucc} from './notify'
 import i18n from './i18n'
-import {getState} from "./session";
+import {clearState, getState} from "./session";
 
 const t = i18n.global.t
 
@@ -32,6 +32,12 @@ instance.interceptors.response.use(function (resp) {
     let code = data.errcode
     if (code !== 0) {
         Nerr(code + " : " + data.errmsg)
+        if (code === 1003) {
+            setTimeout(function () {
+                clearState()
+                location.reload()
+            }, 1500)
+        }
         return
     }
     let rdata = data.data

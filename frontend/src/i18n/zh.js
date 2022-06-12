@@ -14,7 +14,8 @@ const zh = {
     not_permit: "没有权限",
     system_admin: "系统管理",
     admin: "管理员",
-    tq: "天气"
+    tq: "天气",
+    menu: "菜单"
 }
 
 export default zh

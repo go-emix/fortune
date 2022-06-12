@@ -3,6 +3,8 @@ import {ref} from "vue"
 import {useI18n} from 'vue-i18n'
 import Left from './Left.vue'
 import ax from "../pkg/axios"
+import {appendChildMenu} from "../pkg/utils"
+import Top from "./Top.vue"
 
 const list = ref([])
 
@@ -10,6 +12,9 @@ async function setList() {
     let da = await ax({
         url: "system/menuList"
     })
+    if (!da) {
+        return
+    }
     let ln = da.length
     let ms = []
     for (let i = 0; i < ln; i++) {
@@ -24,23 +29,12 @@ async function setList() {
 
 setList()
 
-function appendChildMenu(m, ms) {
-    let ln = ms.length
-    m.children = []
-    for (let i = 0; i < ln; i++) {
-        let im = ms[i]
-        if (im.parent === m.id) {
-            m.children.push(im)
-            appendChildMenu(im, ms)
-        }
-    }
-}
-
 const {t} = useI18n()
 
 </script>
 
 <template>
+    <Top></Top>
     <Left></Left>
     <el-table
         :data="list"

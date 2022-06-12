@@ -5,6 +5,7 @@ import {isLogin} from "./auth"
 import Login from "../components/Login.vue"
 import NotFound from "../components/NotFound.vue"
 import Menu from "../components/Menu.vue"
+import {saveState} from "./session";
 
 export default async function init(router) {
     if (!isLogin()) {
@@ -26,6 +27,7 @@ export default async function init(router) {
     if (!menu) {
         return
     }
+    saveState({menus: menu})
     let routes = router.getRoutes()
     for (let i = 0; i < routes.length; i++) {
         router.removeRoute(routes[i].name)
@@ -42,6 +44,11 @@ export default async function init(router) {
         let vc = toVueComponent(menu[i].component)
         if (vc) {
             menu[i].component = vc
+            let au = menu[i].auth
+            if (au) {
+                menu[i].meta = {}
+                menu[i].meta.auth = au
+            }
             router.addRoute(menu[i])
         }
     }

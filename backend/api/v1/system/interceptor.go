@@ -15,6 +15,10 @@ func LoginInterceptor(c *gin.Context) {
 	}
 	token, err := jwt.ParseToken(th)
 	if err != nil {
+		if err == jwt.TokenExpiredErr {
+			resp.Err(c, i18n.NewErr(c, "token_expired", nil).Resp())
+			return
+		}
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
 		return
 	}

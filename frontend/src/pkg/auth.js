@@ -9,10 +9,11 @@ export function isLogin() {
 }
 
 export function isPermit(to) {
-    let state = getState();
-    for (let i = 0; i < state.permit.length; i++) {
-        let p = state.permit[i];
-        if (p === "*" || p === to) {
+    let menus = getState().menus;
+    let ln = menus.length
+    for (let i = 0; i < ln; i++) {
+        let m = menus[i]
+        if (m.auth === to) {
             return true
         }
     }

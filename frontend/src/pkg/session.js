@@ -15,8 +15,11 @@ export function saveState(obj) {
             case "i18n":
                 state.i18n = value
                 break
-            case "permit":
-                state.permit = value
+            case "menus":
+                state.menus = value
+                break
+            case "components":
+                state.components = value
                 break
         }
     }

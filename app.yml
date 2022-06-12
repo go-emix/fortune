@@ -10,6 +10,8 @@ app:
       errcode: 1001
     - name: password_error
       errcode: 1002
+    - name: token_expired
+      errcode: 1003
 logs:
   - level: debug
     format: text
