@@ -1,7 +1,8 @@
 import ax from 'axios'
 import {Nerr, Nsucc} from './notify'
 import i18n from './i18n'
-import {clearState, getState} from "./session";
+import {exit} from "./session"
+import {isLogin} from "./auth"
 
 const t = i18n.global.t
 
@@ -13,9 +14,9 @@ let instance = ax.create({
 })
 
 instance.interceptors.request.use(function (config) {
-    let state = getState();
-    if (state) {
-        config.headers["token"] = state.token
+    let token = isLogin()
+    if (token) {
+        config.headers["token"] = token
     }
     config.headers["lang"] = String(i18n.global.locale)
     return config
@@ -34,8 +35,7 @@ instance.interceptors.response.use(function (resp) {
         Nerr(code + " : " + data.errmsg)
         if (code === 1003) {
             setTimeout(function () {
-                clearState()
-                location.reload()
+                exit()
             }, 1500)
         }
         return

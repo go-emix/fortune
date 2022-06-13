@@ -5,7 +5,7 @@ export function isLogin() {
     if (!state) {
         return false
     }
-    return true
+    return state.token
 }
 
 export function isPermit(to) {

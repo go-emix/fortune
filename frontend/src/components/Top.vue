@@ -1,17 +1,12 @@
 <script setup>
 import {useI18n} from 'vue-i18n'
 import {langs} from '../pkg/i18n'
-import {clearState, saveState} from "../pkg/session"
+import {exit, saveState} from "../pkg/session"
 
 const {t, locale} = useI18n()
 
 function syncI18n(va) {
     saveState({i18n: va})
-}
-
-function exit() {
-    clearState()
-    location.reload()
 }
 
 </script>

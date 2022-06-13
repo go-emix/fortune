@@ -38,3 +38,8 @@ export function getState() {
 export function clearState() {
     Cookies.remove("state")
 }
+
+export function exit() {
+    clearState()
+    location.reload()
+}
