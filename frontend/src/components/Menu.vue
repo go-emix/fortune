@@ -5,13 +5,8 @@ import Left from './Left.vue'
 import ax from "../pkg/axios"
 import {appendChildMenu} from "../pkg/utils"
 import Top from "./Top.vue"
-import {useRouter} from "vue-router";
 
 const list = ref([])
-
-const router=useRouter()
-
-console.log(router.getRoutes())
 
 async function setList() {
     let da = await ax({
