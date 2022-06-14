@@ -3,6 +3,7 @@ import {isLogin, isPermit} from "./auth"
 import {Nerr} from "./notify"
 import i18n from "./i18n"
 import menu from './menu'
+import feature from './feature'
 
 const t = i18n.global.t
 
@@ -19,6 +20,8 @@ const router = createRouter({
 });
 
 await menu(router)
+
+await feature()
 
 router.beforeEach(function (to, from, next) {
     let au = to.meta.auth

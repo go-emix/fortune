@@ -38,7 +38,7 @@ setShow()
         </el-menu-item>
         <el-sub-menu index="system" v-if="show.admin||show.menu">
             <template v-slot:title>
-                <span>{{ t("system_admin") }}</span>
+                <span>{{ t("admin") }}</span>
             </template>
             <el-menu-item index="admin" v-if="show.admin">
                 {{ t("admin") }}

@@ -86,3 +86,23 @@ type RoleApi struct {
 func (RoleApi) TableName() string {
 	return "role_api"
 }
+
+type Feature struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+	Menu int    `json:"menu"`
+}
+
+func (Feature) TableName() string {
+	return "feature"
+}
+
+type RoleFeature struct {
+	Id      int
+	Role    int
+	Feature int
+}
+
+func (RoleFeature) TableName() string {
+	return "role_feature"
+}

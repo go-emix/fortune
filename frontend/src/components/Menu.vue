@@ -8,6 +8,8 @@ import Top from "./Top.vue"
 
 const list = ref([])
 
+const {t} = useI18n()
+
 async function setList() {
     let da = await ax({
         url: "system/menuList"
@@ -27,9 +29,11 @@ async function setList() {
     list.value = ms
 }
 
-setList()
+function format(row, col, cell) {
+    return t(cell)
+}
 
-const {t} = useI18n()
+setList()
 
 </script>
 
@@ -48,8 +52,9 @@ const {t} = useI18n()
         </el-table-column>
         <el-table-column
             prop="name"
-            label="name"
-            width="180">
+            :label="t('name')"
+            width="180"
+            :formatter="format">
         </el-table-column>
         <el-table-column
             prop="parent"

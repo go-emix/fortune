@@ -5,7 +5,7 @@ import {isLogin} from "./auth"
 import Login from "../components/Login.vue"
 import NotFound from "../components/NotFound.vue"
 import Menu from "../components/Menu.vue"
-import {saveState} from "./session";
+import {saveState} from "./session"
 
 export default async function init(router) {
     if (!isLogin()) {
@@ -46,7 +46,7 @@ export default async function init(router) {
             menu[i].component = vc
             let au = menu[i].auth
             if (au) {
-                menu[i].meta = {}
+                menu[i].meta = {id: menu[i].id}
                 menu[i].meta.auth = au
             }
             router.addRoute(menu[i])

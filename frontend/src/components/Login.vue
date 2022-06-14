@@ -7,6 +7,7 @@ import {langs} from '../pkg/i18n'
 import {saveState} from "../pkg/session"
 import {useRouter} from 'vue-router'
 import menu from '../pkg/menu'
+import feature from '../pkg/feature'
 
 const {t, locale} = useI18n()
 
@@ -41,6 +42,7 @@ async function login() {
         msg = da.username
     }
     await menu(router)
+    await feature()
     await router.push({name: "dashboard"})
     Nsucc(t("welcome") + " " + msg)
 }

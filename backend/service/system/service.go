@@ -46,14 +46,7 @@ func Login(c *gin.Context, param LoginParam) (succ LoginSucc, ierr *i18n.Error) 
 	return
 }
 
-func Menus(uid int) (rm []Menu, err error) {
-	roles := make([]int, 0)
-	err = common.DB.Model(UserRole{}).Joins("left join user on "+
-		"user.id=user_role.user").Where("user=?", uid).
-		Pluck("role", &roles).Error
-	if err != nil {
-		return
-	}
+func Menus(roles []int) (rm []Menu, err error) {
 	for _, r := range roles {
 		menus := make([]Menu, 0)
 		err = common.DB.Model(Menu{}).Joins("right join role_menu on "+
@@ -86,12 +79,12 @@ func MenuList() (rm []Menu, err error) {
 	return
 }
 
-func Migrate() error {
+func Migrate() (err error) {
 	// admin init
 	emlogrus.Info("migrate admin init")
-	err := common.DB.AutoMigrate(User{})
+	err = common.DB.AutoMigrate(User{})
 	if err != nil {
-		return err
+		return
 	}
 	ad := User{
 		Username: "ad",
@@ -99,18 +92,18 @@ func Migrate() error {
 	}
 	password, err := bcrypt.GenerateFromPassword([]byte("123456"), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		return
 	}
 	ad.Password = string(password)
 	err = common.DB.FirstOrCreate(&ad, User{Username: ad.Username}).Error
 	if err != nil {
-		return err
+		return
 	}
 	// menu init
 	emlogrus.Info("migrate menu init")
 	err = common.DB.AutoMigrate(Menu{})
 	if err != nil {
-		return err
+		return
 	}
 	login := "login"
 	dashboard := "dashboard"
@@ -160,7 +153,7 @@ func Migrate() error {
 	emlogrus.Info("migrate role init")
 	err = common.DB.AutoMigrate(Role{})
 	if err != nil {
-		return err
+		return
 	}
 	root := "root"
 	rootRole := Role{Name: "root"}
@@ -172,7 +165,7 @@ func Migrate() error {
 	emlogrus.Info("migrate role_menu init")
 	err = common.DB.AutoMigrate(RoleMenu{})
 	if err != nil {
-		return err
+		return
 	}
 	menus := make([]Menu, 0)
 	common.DB.Where("role=?", rootRole.Id).Unscoped().Delete(RoleMenu{})
@@ -180,14 +173,14 @@ func Migrate() error {
 	for _, m := range menus {
 		err = common.DB.Create(&RoleMenu{Role: rootRole.Id, Menu: m.Id}).Error
 		if err != nil {
-			return err
+			return
 		}
 	}
 	// role_menu init
 	emlogrus.Info("migrate user_role init")
 	err = common.DB.AutoMigrate(UserRole{})
 	if err != nil {
-		return err
+		return
 	}
 	userRootRole := UserRole{User: ad.Id,
 		Role: rootRole.Id}
@@ -199,13 +192,86 @@ func Migrate() error {
 	emlogrus.Info("migrate api init")
 	err = common.DB.AutoMigrate(Api{})
 	if err != nil {
-		return err
+		return
 	}
 	// role_api init
 	emlogrus.Info("migrate role_api init")
 	err = common.DB.AutoMigrate(RoleApi{})
 	if err != nil {
-		return err
+		return
 	}
-	return nil
+	// feature init
+	emlogrus.Info("migrate feature init")
+	err = common.DB.AutoMigrate(Feature{})
+	if err != nil {
+		return
+	}
+	addAdmin := Feature{
+		Name: "add",
+		Menu: adminMenu.Id,
+	}
+	err = common.DB.FirstOrCreate(&addAdmin, addAdmin).Error
+	if err != nil {
+		return
+	}
+	deleteAdmin := Feature{
+		Name: "delete",
+		Menu: adminMenu.Id,
+	}
+	err = common.DB.FirstOrCreate(&deleteAdmin, deleteAdmin).Error
+	if err != nil {
+		return
+	}
+	lookAdmin := Feature{
+		Name: "look",
+		Menu: adminMenu.Id,
+	}
+	err = common.DB.FirstOrCreate(&lookAdmin, lookAdmin).Error
+	if err != nil {
+		return
+	}
+	// role_feature init
+	emlogrus.Info("migrate role_feature init")
+	err = common.DB.AutoMigrate(RoleFeature{})
+	if err != nil {
+		return
+	}
+	features := make([]Feature, 0)
+	common.DB.Where("role=?", rootRole.Id).Unscoped().Delete(RoleFeature{})
+	common.DB.Model(Feature{}).Find(&features)
+	for _, f := range features {
+		err = common.DB.Create(&RoleFeature{Role: rootRole.Id, Feature: f.Id}).Error
+		if err != nil {
+			return
+		}
+	}
+	return
+}
+
+func Features(roles []int) (rm []Feature, err error) {
+	for _, r := range roles {
+		feas := make([]Feature, 0)
+		err = common.DB.Model(Feature{}).Joins("right join role_feature on "+
+			"feature.id=role_feature.feature and role_feature.role=?", r).
+			Find(&feas).Error
+		if err != nil {
+			return
+		}
+		rm = append(rm, feas...)
+	}
+	m := make(map[int]Feature)
+	fids := make([]int, 0)
+	for _, fea := range rm {
+		_, ok := m[fea.Id]
+		if !ok {
+			m[fea.Id] = fea
+			fids = append(fids, fea.Id)
+		}
+	}
+	sort.Ints(fids)
+	rm = make([]Feature, 0)
+	for _, fid := range fids {
+		rm = append(rm, m[fid])
+	}
+	return
 }

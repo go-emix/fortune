@@ -18,8 +18,8 @@ export function saveState(obj) {
             case "menus":
                 state.menus = value
                 break
-            case "components":
-                state.components = value
+            case "features":
+                state.features = value
                 break
         }
     }

@@ -24,7 +24,7 @@ func Login(c *gin.Context) {
 }
 
 func Menus(c *gin.Context) {
-	menus, err := system.Menus(getUid(c))
+	menus, err := system.Menus(getRoles(c))
 	if err != nil {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
 		return
@@ -51,4 +51,13 @@ func Tianqi(c *gin.Context) {
 		return
 	}
 	resp.Data(c, temp)
+}
+
+func Features(c *gin.Context) {
+	feas, err := system.Features(getRoles(c))
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	resp.Data(c, feas)
 }

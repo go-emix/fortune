@@ -15,7 +15,11 @@ const zh = {
     system_admin: "系统管理",
     admin: "管理员",
     tq: "天气",
-    menu: "菜单"
+    menu: "菜单",
+    system: "系统",
+    name: "名称",
+    add: "添加",
+    delete: "删除"
 }
 
 export default zh

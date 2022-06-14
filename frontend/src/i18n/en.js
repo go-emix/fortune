@@ -15,7 +15,11 @@ const en = {
     system_admin: "System admin",
     admin: "Admin",
     tq: "weather",
-    menu: "Menu"
+    menu: "Menu",
+    system: "System",
+    name: "name",
+    add: "add",
+    delete: "delete"
 }
 
 export default en

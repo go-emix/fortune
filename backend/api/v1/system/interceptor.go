@@ -2,9 +2,11 @@ package system
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-emix/fortune/backend/pkg/common"
 	"github.com/go-emix/fortune/backend/pkg/i18n"
 	"github.com/go-emix/fortune/backend/pkg/jwt"
 	"github.com/go-emix/fortune/backend/pkg/resp"
+	"github.com/go-emix/fortune/backend/service/system"
 )
 
 func LoginInterceptor(c *gin.Context) {
@@ -23,6 +25,15 @@ func LoginInterceptor(c *gin.Context) {
 		return
 	}
 	c.Set("uid", token.UserId)
+	roles := make([]int, 0)
+	err = common.DB.Model(system.UserRole{}).Joins("left join user on "+
+		"user.id=user_role.user").Where("user=?", token.UserId).
+		Pluck("role", &roles).Error
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	c.Set("roles", roles)
 }
 
 func PermissionInterceptor(c *gin.Context) {
