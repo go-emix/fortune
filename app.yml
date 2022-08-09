@@ -1,17 +1,8 @@
 db:
   scripts:
     - conf/init.sql
-app:
-  mode: prod
-  resps:
-    - name: system_fault
-      errcode: 1000
-    - name: user_not_exist
-      errcode: 1001
-    - name: password_error
-      errcode: 1002
-    - name: token_expired
-      errcode: 1003
+#app:
+#  mode: prod
 logs:
   - level: debug
     format: text

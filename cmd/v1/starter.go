@@ -3,6 +3,7 @@ package v1
 import (
 	"errors"
 	emlogrus "github.com/go-emix/emix-logrus"
+	"github.com/go-emix/fortune/backend/pkg/common"
 	"github.com/go-emix/fortune/backend/pkg/resp"
 	"github.com/go-emix/fortune/config"
 	"github.com/go-emix/fortune/version"
@@ -73,13 +74,13 @@ func loadConfig() error {
 	}
 	mo := viper.GetString("app.mode")
 	if mo != "" {
-		m := config.Mode(mo)
-		if m != config.Dev {
-			if m != config.Prod {
+		m := common.Mode(mo)
+		if m != common.Dev {
+			if m != common.Prod {
 				return errors.New("unknown app mode " + string(m))
 			}
 		}
-		config.AppC.Mode = m
+		config.AppC.Mode = mo
 	}
 	get := viper.Get("logs")
 	ls, ok := get.([]interface{})
@@ -126,7 +127,6 @@ func loadConfig() error {
 	resps := viper.Get("app.resps")
 	rs, ok := resps.([]interface{})
 	if ok {
-		rps := make(map[string]resp.Resp, 0)
 		for _, r := range rs {
 			m := r.(map[interface{}]interface{})
 			rp := resp.Resp{}
@@ -141,10 +141,9 @@ func loadConfig() error {
 			if m["name"] == nil {
 				return errors.New("name not empty")
 			} else {
-				rps[m["name"].(string)] = rp
+				config.AppC.Resps[m["name"].(string)] = rp
 			}
 		}
-		config.AppC.Resps = rps
 	}
 	expire := viper.GetInt("app.jwt.expire")
 	if expire != 0 {

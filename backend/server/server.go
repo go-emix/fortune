@@ -4,6 +4,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	emlogrus "github.com/go-emix/emix-logrus"
+	"github.com/go-emix/fortune/backend/pkg/common"
 	"github.com/go-emix/fortune/backend/router"
 	"net/http"
 	"os"
@@ -17,11 +18,11 @@ type Server struct {
 	killChan chan os.Signal
 }
 
-func SetMode(m string) {
-	switch m {
-	case "dev":
+func setMode() {
+	switch common.RunMode {
+	case common.Dev:
 		gin.SetMode(gin.DebugMode)
-	case "prod":
+	case common.Prod:
 		gin.SetMode(gin.ReleaseMode)
 	default:
 		gin.SetMode(gin.DebugMode)
@@ -29,6 +30,7 @@ func SetMode(m string) {
 }
 
 func NewServer(port int, frontDist string) *Server {
+	setMode()
 	ser := &Server{port: port, eng: gin.New()}
 	ser.killChan = make(chan os.Signal)
 	ser.eng.Use(gin.Recovery())

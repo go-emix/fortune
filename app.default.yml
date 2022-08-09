@@ -16,6 +16,10 @@ app:
       errcode: 1001
     - name: password_error
       errcode: 1002
+    - name: user_not_enabled
+      errcode: 1003
+    - name: token_expired
+      errcode: 1004
   i18n: conf/i18n
 server:
   port: 3678

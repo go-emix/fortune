@@ -27,6 +27,7 @@ func run() *cobra.Command {
 			cmd.Println(err.Error())
 			return
 		}
+		common.RunMode = common.Mode(config.AppC.Mode)
 		config.ExeSql()
 		common.Resps = config.AppC.Resps
 		common.DB = config.GetDb()
@@ -41,7 +42,6 @@ func run() *cobra.Command {
 			cmd.Println(err.Error())
 			return
 		}
-		server.SetMode(string(config.AppC.Mode))
 		backend := server.NewServer(config.ServerC.Port, config.FrontendC.Dist)
 		backend.Run()
 	}

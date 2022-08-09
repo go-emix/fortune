@@ -28,7 +28,7 @@ type Frontend struct {
 }
 
 type App struct {
-	Mode  Mode
+	Mode  string
 	Resps map[string]resp.Resp
 	Jwt   Jwt
 	I18n  string
@@ -38,13 +38,6 @@ type Jwt struct {
 	SignKey string
 	Expire  int // second
 }
-
-type Mode string
-
-const (
-	Prod Mode = "prod"
-	Dev  Mode = "dev"
-)
 
 var ServerC Server
 var DbC Db
@@ -58,8 +51,19 @@ func init() {
 	DbC.Password = "123456"
 	DbC.Scripts = []string{}
 	ServerC.Port = 3678
-	AppC.Mode = Dev
+	AppC.Mode = "dev"
 	AppC.Resps = make(map[string]resp.Resp)
+	// init resps
+	errcode := 1000
+	AppC.Resps["system_fault"] = resp.Resp{ErrCode: errcode}
+	errcode++
+	AppC.Resps["user_not_exist"] = resp.Resp{ErrCode: errcode}
+	errcode++
+	AppC.Resps["password_error"] = resp.Resp{ErrCode: errcode}
+	errcode++
+	AppC.Resps["user_not_enabled"] = resp.Resp{ErrCode: errcode}
+	errcode++
+	AppC.Resps["token_expired"] = resp.Resp{ErrCode: errcode}
 	AppC.Jwt.SignKey = version.Name
 	AppC.Jwt.Expire = 3600
 	AppC.I18n = "conf/i18n"

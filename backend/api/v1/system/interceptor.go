@@ -26,8 +26,8 @@ func LoginInterceptor(c *gin.Context) {
 	}
 	c.Set("uid", token.UserId)
 	roles := make([]int, 0)
-	err = common.DB.Model(system.UserRole{}).Joins("left join user on "+
-		"user.id=user_role.user").Where("user=?", token.UserId).
+	err = common.DB.Model(system.AdminRole{}).Joins("left join admin on "+
+		"admin.id=admin_role.admin").Where("admin=?", token.UserId).
 		Pluck("role", &roles).Error
 	if err != nil {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())

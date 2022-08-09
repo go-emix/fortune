@@ -5,16 +5,19 @@ type LoginParam struct {
 	Password string
 }
 
-type User struct {
+// Admin 管理员
+type Admin struct {
 	Id       int
 	Username string
 	Password string
 	Nickname string
 	Roles    []Role `gorm:"-"`
+	// 是否启用
+	Enabled bool
 }
 
-func (User) TableName() string {
-	return "user"
+func (Admin) TableName() string {
+	return "admin"
 }
 
 type LoginSucc struct {
@@ -29,8 +32,9 @@ type Menu struct {
 	Name      string `json:"name"`
 	Component string `json:"component"`
 	Path      string `json:"path"`
-	Auth      string `json:"auth"`
-	Parent    int    `json:"parent"`
+	// 权限标识
+	Auth   string `json:"auth"`
+	Parent int    `json:"parent"`
 }
 
 func (Menu) TableName() string {
@@ -57,14 +61,14 @@ func (RoleMenu) TableName() string {
 	return "role_menu"
 }
 
-type UserRole struct {
-	Id   int
-	User int
-	Role int
+type AdminRole struct {
+	Id    int
+	Admin int
+	Role  int
 }
 
-func (UserRole) TableName() string {
-	return "user_role"
+func (AdminRole) TableName() string {
+	return "admin_role"
 }
 
 type Api struct {

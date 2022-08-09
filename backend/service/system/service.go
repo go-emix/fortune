@@ -12,9 +12,9 @@ import (
 )
 
 func Login(c *gin.Context, param LoginParam) (succ LoginSucc, ierr *i18n.Error) {
-	var u User
+	var u Admin
 	var err error
-	err = common.DB.Model(User{}).Where("username=?",
+	err = common.DB.Model(Admin{}).Where("username=?",
 		param.Username).Find(&u).Error
 	if err != nil {
 		ierr = i18n.NewErr(c, "", err)
@@ -22,6 +22,10 @@ func Login(c *gin.Context, param LoginParam) (succ LoginSucc, ierr *i18n.Error) 
 	}
 	if u.Id == 0 {
 		ierr = i18n.NewErr(c, "user_not_exist", nil)
+		return
+	}
+	if !u.Enabled {
+		ierr = i18n.NewErr(c, "user_not_enabled", nil)
 		return
 	}
 	if u.Password == "" {
@@ -47,6 +51,19 @@ func Login(c *gin.Context, param LoginParam) (succ LoginSucc, ierr *i18n.Error) 
 }
 
 func Menus(roles []int) (rm []Menu, err error) {
+	if len(roles) == 0 {
+		err = errors.New("roles not empty")
+		return
+	}
+	root := Role{}
+	err = common.DB.Where("name=?", "root").First(&root).Error
+	if err != nil {
+		return
+	}
+	if root.Id == roles[0] {
+		err = common.DB.Model(Menu{}).Order("id").Find(&rm).Error
+		return
+	}
 	for _, r := range roles {
 		menus := make([]Menu, 0)
 		err = common.DB.Model(Menu{}).Joins("right join role_menu on "+
@@ -82,11 +99,11 @@ func MenuList() (rm []Menu, err error) {
 func Migrate() (err error) {
 	// admin init
 	emlogrus.Info("migrate admin init")
-	err = common.DB.AutoMigrate(User{})
+	err = common.DB.AutoMigrate(Admin{})
 	if err != nil {
 		return
 	}
-	ad := User{
+	ad := Admin{
 		Username: "ad",
 		Nickname: "管理员",
 	}
@@ -95,9 +112,22 @@ func Migrate() (err error) {
 		return
 	}
 	ad.Password = string(password)
-	err = common.DB.FirstOrCreate(&ad, User{Username: ad.Username}).Error
-	if err != nil {
-		return
+	common.DB.Model(Admin{}).Where("username=?", ad.Username).Find(&ad)
+	if common.RunMode == common.Dev {
+		ad.Enabled = true
+	} else {
+		ad.Enabled = false
+	}
+	if ad.Id == 0 {
+		err = common.DB.Create(&ad).Error
+		if err != nil {
+			return
+		}
+	} else {
+		err = common.DB.Save(&ad).Error
+		if err != nil {
+			return
+		}
 	}
 	// menu init
 	emlogrus.Info("migrate menu init")
@@ -167,22 +197,13 @@ func Migrate() (err error) {
 	if err != nil {
 		return
 	}
-	menus := make([]Menu, 0)
-	common.DB.Where("role=?", rootRole.Id).Unscoped().Delete(RoleMenu{})
-	common.DB.Model(Menu{}).Find(&menus)
-	for _, m := range menus {
-		err = common.DB.Create(&RoleMenu{Role: rootRole.Id, Menu: m.Id}).Error
-		if err != nil {
-			return
-		}
-	}
-	// role_menu init
-	emlogrus.Info("migrate user_role init")
-	err = common.DB.AutoMigrate(UserRole{})
+	// admin_role init
+	emlogrus.Info("migrate admin_role init")
+	err = common.DB.AutoMigrate(AdminRole{})
 	if err != nil {
 		return
 	}
-	userRootRole := UserRole{User: ad.Id,
+	userRootRole := AdminRole{Admin: ad.Id,
 		Role: rootRole.Id}
 	create = common.DB.FirstOrCreate(&userRootRole, userRootRole)
 	if userRootRole.Id == 0 {
@@ -236,19 +257,23 @@ func Migrate() (err error) {
 	if err != nil {
 		return
 	}
-	features := make([]Feature, 0)
-	common.DB.Where("role=?", rootRole.Id).Unscoped().Delete(RoleFeature{})
-	common.DB.Model(Feature{}).Find(&features)
-	for _, f := range features {
-		err = common.DB.Create(&RoleFeature{Role: rootRole.Id, Feature: f.Id}).Error
-		if err != nil {
-			return
-		}
-	}
 	return
 }
 
 func Features(roles []int) (rm []Feature, err error) {
+	if len(roles) == 0 {
+		err = errors.New("roles not empty")
+		return
+	}
+	root := Role{}
+	err = common.DB.Where("name=?", "root").First(&root).Error
+	if err != nil {
+		return
+	}
+	if root.Id == roles[0] {
+		err = common.DB.Model(Feature{}).Order("id").Find(&rm).Error
+		return
+	}
 	for _, r := range roles {
 		feas := make([]Feature, 0)
 		err = common.DB.Model(Feature{}).Joins("right join role_feature on "+
@@ -272,6 +297,26 @@ func Features(roles []int) (rm []Feature, err error) {
 	rm = make([]Feature, 0)
 	for _, fid := range fids {
 		rm = append(rm, m[fid])
+	}
+	return
+}
+
+func UpdateRole(roleId int, mids []int, fids []int) (err error) {
+	menus := make([]Menu, 0)
+	common.DB.Where("role=?", roleId).Unscoped().Delete(RoleMenu{})
+	common.DB.Model(Menu{}).Find(&menus)
+	for _, m := range mids {
+		err = common.DB.Create(&RoleMenu{Role: roleId, Menu: m}).Error
+		if err != nil {
+			return
+		}
+	}
+	common.DB.Where("role=?", roleId).Unscoped().Delete(RoleFeature{})
+	for _, f := range fids {
+		err = common.DB.Create(&RoleFeature{Role: roleId, Feature: f}).Error
+		if err != nil {
+			return
+		}
 	}
 	return
 }
