@@ -32,8 +32,8 @@ func Menus(c *gin.Context) {
 	resp.Data(c, menus)
 }
 
-func MenuList(c *gin.Context) {
-	menus, err := system.MenuList()
+func RoleList(c *gin.Context) {
+	menus, err := system.RoleList()
 	if err != nil {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
 		return

@@ -19,7 +19,12 @@ const en = {
     system: "System",
     name: "name",
     add: "add",
-    delete: "delete"
+    delete: "delete",
+    role: "Role",
+    root: "root",
+    operate: "operate",
+    edit: "edit",
+    feature: "feature"
 }
 
 export default en

@@ -4,7 +4,7 @@ import Dashboard from "../components/Dashboard.vue"
 import {isLogin} from "./auth"
 import Login from "../components/Login.vue"
 import NotFound from "../components/NotFound.vue"
-import Menu from "../components/Menu.vue"
+import Role from "../components/Role.vue"
 import {saveState} from "./session"
 
 export default async function init(router) {
@@ -60,8 +60,8 @@ function toVueComponent(com) {
             return Admin
         case "dashboard":
             return Dashboard
-        case "menu":
-            return Menu
+        case "role":
+            return Role
     }
     return undefined
 }

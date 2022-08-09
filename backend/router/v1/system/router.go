@@ -11,5 +11,5 @@ func Register(r gin.IRouter) {
 	gr.GET("tq", system.Tianqi)
 	gr.GET("menus", system.LoginInterceptor, system.Menus)
 	gr.GET("features", system.LoginInterceptor, system.Features)
-	gr.GET("menuList", system.LoginInterceptor, system.MenuList)
+	gr.GET("roleList", system.LoginInterceptor, system.RoleList)
 }

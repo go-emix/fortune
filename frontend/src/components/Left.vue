@@ -36,15 +36,15 @@ setShow()
         <el-menu-item index="dashboard" v-if="show.dashboard">
             <span slot="title">{{ t("dashboard") }}</span>
         </el-menu-item>
-        <el-sub-menu index="system" v-if="show.admin||show.menu">
-            <template v-slot:title>
+        <el-sub-menu index="system" v-if="show.admin||show.role">
+            <template #title>
                 <span>{{ t("system") }}</span>
             </template>
             <el-menu-item index="admin" v-if="show.admin">
                 {{ t("admin") }}
             </el-menu-item>
-            <el-menu-item index="menu" v-if="show.menu">
-                {{ t("menu") }}
+            <el-menu-item index="role" v-if="show.role">
+                {{ t("role") }}
             </el-menu-item>
         </el-sub-menu>
     </el-menu>

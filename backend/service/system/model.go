@@ -42,9 +42,9 @@ func (Menu) TableName() string {
 }
 
 type Role struct {
-	Id    int
-	Name  string
-	Menus []Menu `gorm:"-"`
+	Id    int    `json:"id"`
+	Name  string `json:"name"`
+	Menus []Menu `gorm:"-" json:"-"`
 }
 
 func (Role) TableName() string {

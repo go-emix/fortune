@@ -91,8 +91,8 @@ func Menus(roles []int) (rm []Menu, err error) {
 	return
 }
 
-func MenuList() (rm []Menu, err error) {
-	err = common.DB.Model(Menu{}).Find(&rm).Error
+func RoleList() (rs []Role, err error) {
+	err = common.DB.Model(Role{}).Find(&rs).Error
 	return
 }
 
@@ -167,16 +167,16 @@ func Migrate() (err error) {
 	if adminMenu.Id == 0 {
 		return create.Error
 	}
-	menu := "menu"
-	menuMenu := Menu{
-		Name:      menu,
-		Path:      "/" + menu,
-		Component: menu,
-		Auth:      menu,
+	role := "role"
+	roleMenu := Menu{
+		Name:      role,
+		Path:      "/" + role,
+		Component: role,
+		Auth:      role,
 		Parent:    systemMenu.Id,
 	}
-	create = common.DB.FirstOrCreate(&menuMenu, Menu{Name: menu})
-	if menuMenu.Id == 0 {
+	create = common.DB.FirstOrCreate(&roleMenu, Menu{Name: role})
+	if roleMenu.Id == 0 {
 		return create.Error
 	}
 	// role init

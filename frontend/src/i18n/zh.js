@@ -19,7 +19,12 @@ const zh = {
     system: "系统",
     name: "名称",
     add: "添加",
-    delete: "删除"
+    delete: "删除",
+    role: "角色",
+    root: "超级用户",
+    operate: "操作",
+    edit: "编辑",
+    feature: "功能"
 }
 
 export default zh
