@@ -9,7 +9,7 @@ func Register(r gin.IRouter) {
 	gr := r.Group("system")
 	gr.POST("login", system.Login)
 	gr.GET("tq", system.Tianqi)
-	gr.GET("menus", system.LoginInterceptor, system.Menus)
-	gr.GET("features", system.LoginInterceptor, system.Features)
-	gr.GET("roleList", system.LoginInterceptor, system.RoleList)
+	gr.GET("menus", system.LoginInterceptor, system.ApiInterceptor, system.Menus)
+	gr.GET("features", system.LoginInterceptor, system.ApiInterceptor, system.Features)
+	gr.GET("roleList", system.LoginInterceptor, system.ApiInterceptor, system.RoleList)
 }

@@ -4,6 +4,7 @@ db:
   ip: 127.0.0.1
   password: 123456
   database: fortune
+  port: 3306
 app:
   mode: dev
   jwt:

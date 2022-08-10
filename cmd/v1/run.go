@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/go-emix/fortune/backend/pkg/casbin"
 	"github.com/go-emix/fortune/backend/pkg/common"
 	"github.com/go-emix/fortune/backend/pkg/i18n"
 	"github.com/go-emix/fortune/backend/pkg/jwt"
@@ -38,6 +39,11 @@ func run() *cobra.Command {
 			return
 		}
 		err = service.Migrate()
+		if err != nil {
+			cmd.Println(err.Error())
+			return
+		}
+		err = casbin.Initialize()
 		if err != nil {
 			cmd.Println(err.Error())
 			return

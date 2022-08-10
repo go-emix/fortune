@@ -64,6 +64,8 @@ func init() {
 	AppC.Resps["user_not_enabled"] = resp.Resp{ErrCode: errcode}
 	errcode++
 	AppC.Resps["token_expired"] = resp.Resp{ErrCode: errcode}
+	errcode++
+	AppC.Resps["permission_denied"] = resp.Resp{ErrCode: errcode}
 	AppC.Jwt.SignKey = version.Name
 	AppC.Jwt.Expire = 3600
 	AppC.I18n = "conf/i18n"

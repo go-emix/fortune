@@ -2,6 +2,7 @@ package system
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-emix/fortune/backend/service/system"
 )
 
 func getUid(c *gin.Context) int {
@@ -9,7 +10,15 @@ func getUid(c *gin.Context) int {
 	return get.(int)
 }
 
-func getRoles(c *gin.Context) []int {
+func getRoles(c *gin.Context) []system.Role {
 	get, _ := c.Get("roles")
-	return get.([]int)
+	return get.([]system.Role)
+}
+
+func getRids(roles []system.Role) []int {
+	rids := make([]int, 0)
+	for _, r := range roles {
+		rids = append(rids, r.Id)
+	}
+	return rids
 }
