@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-emix/fortune/backend/pkg/i18n"
 	"github.com/go-emix/fortune/backend/pkg/resp"
-	"github.com/go-emix/fortune/backend/pkg/tianqi"
 	"github.com/go-emix/fortune/backend/service/system"
 )
 
@@ -30,27 +29,6 @@ func Menus(c *gin.Context) {
 		return
 	}
 	resp.Data(c, menus)
-}
-
-func RoleList(c *gin.Context) {
-	menus, err := system.RoleList()
-	if err != nil {
-		resp.Err(c, i18n.NewErr(c, "", err).Resp())
-		return
-	}
-	resp.Data(c, menus)
-}
-
-func Tianqi(c *gin.Context) {
-	temp, err := tianqi.GetTemp()
-	if err != nil {
-		resp.Err(c, resp.Resp{
-			ErrCode: 2001,
-			ErrMsg:  err.Error(),
-		})
-		return
-	}
-	resp.Data(c, temp)
 }
 
 func Features(c *gin.Context) {

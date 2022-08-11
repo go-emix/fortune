@@ -92,9 +92,10 @@ func (RoleApi) TableName() string {
 }
 
 type Feature struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-	Menu int    `json:"menu"`
+	Id         int    `json:"id"`
+	Name       string `json:"name"`
+	Menu       int    `json:"menu_id"`
+	MenuEntity Menu   `json:"menu" gorm:"-"`
 }
 
 func (Feature) TableName() string {

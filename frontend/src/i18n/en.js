@@ -24,7 +24,8 @@ const en = {
     root: "root",
     operate: "operate",
     edit: "edit",
-    feature: "feature"
+    feature: "feature",
+    user: "user",
 }
 
 export default en

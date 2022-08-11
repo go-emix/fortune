@@ -12,4 +12,6 @@ func Register(r gin.IRouter) {
 	gr.GET("menus", system.LoginInterceptor, system.ApiInterceptor, system.Menus)
 	gr.GET("features", system.LoginInterceptor, system.ApiInterceptor, system.Features)
 	gr.GET("roleList", system.LoginInterceptor, system.ApiInterceptor, system.RoleList)
+	gr.GET("featureList", system.LoginInterceptor, system.ApiInterceptor, system.FeatureList)
+	gr.GET("featureListByRole", system.LoginInterceptor, system.ApiInterceptor, system.FeatureListByRole)
 }

@@ -33,7 +33,7 @@ instance.interceptors.response.use(function (resp) {
     let code = data.errcode
     if (code !== 0) {
         Nerr(code + " : " + data.errmsg)
-        if (code === 1003) {
+        if (code === 1004) {
             setTimeout(function () {
                 exit()
             }, 1500)
