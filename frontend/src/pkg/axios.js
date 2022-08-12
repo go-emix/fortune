@@ -45,7 +45,7 @@ instance.interceptors.response.use(function (resp) {
         return Promise.resolve(rdata)
     } else {
         let msg = data.errmsg
-        Nsucc(msg)
+        Nsucc(t(msg))
         return Promise.resolve(msg)
     }
 }, function () {

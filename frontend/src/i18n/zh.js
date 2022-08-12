@@ -27,6 +27,9 @@ const zh = {
     feature: "功能",
     user: "用户",
     look: "查看",
+    save: "保存",
+    success: "成功",
+    visitor: "游客",
 }
 
 export default zh

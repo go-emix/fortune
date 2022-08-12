@@ -4,6 +4,7 @@ import (
 	emlogrus "github.com/go-emix/emix-logrus"
 	"github.com/go-emix/fortune/backend/pkg/common"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 func RoleList() (rs []Role, err error) {
@@ -166,6 +167,14 @@ func Migrate() (err error) {
 	if err != nil {
 		return
 	}
+	lookDashboard := Feature{
+		Name: "look",
+		Menu: dashboardMenu.Id,
+	}
+	err = common.DB.FirstOrCreate(&lookDashboard, lookDashboard).Error
+	if err != nil {
+		return
+	}
 	// role_feature init
 	emlogrus.Info("migrate role_feature init")
 	err = common.DB.AutoMigrate(RoleFeature{})
@@ -175,23 +184,50 @@ func Migrate() (err error) {
 	return
 }
 
-func UpdateRole(roleId int, mids []int, fids []int) (err error) {
-	menus := make([]Menu, 0)
-	common.DB.Where("role=?", roleId).Unscoped().Delete(RoleMenu{})
-	common.DB.Model(Menu{}).Find(&menus)
-	for _, m := range mids {
-		err = common.DB.Create(&RoleMenu{Role: roleId, Menu: m}).Error
+func UpdateRoleFeatures(roleId int, fids []int) (err error) {
+	err = common.DB.Transaction(func(tx *gorm.DB) (err error) {
+		if len(fids) == 0 {
+			err = common.DB.Where("role=?", roleId).Unscoped().Delete(RoleMenu{}).Error
+			if err != nil {
+				return
+			}
+			err = common.DB.Where("role=?", roleId).Unscoped().Delete(RoleFeature{}).Error
+			return
+		}
+		fs := make([]Feature, 0)
+		err = common.DB.Model(Feature{}).Where("id in (?)", fids).Find(&fs).Error
 		if err != nil {
 			return
 		}
-	}
-	common.DB.Where("role=?", roleId).Unscoped().Delete(RoleFeature{})
-	for _, f := range fids {
-		err = common.DB.Create(&RoleFeature{Role: roleId, Feature: f}).Error
+		if len(fs) == 0 {
+			return nil
+		}
+		mids := make([]int, 0)
+		for _, f := range fs {
+			mids = append(mids, f.Menu)
+		}
+		err = common.DB.Where("role=?", roleId).Unscoped().Delete(RoleMenu{}).Error
 		if err != nil {
 			return
 		}
-	}
+		for _, m := range mids {
+			err = common.DB.Create(&RoleMenu{Role: roleId, Menu: m}).Error
+			if err != nil {
+				return
+			}
+		}
+		err = common.DB.Where("role=?", roleId).Unscoped().Delete(RoleFeature{}).Error
+		if err != nil {
+			return
+		}
+		for _, f := range fids {
+			err = common.DB.Create(&RoleFeature{Role: roleId, Feature: f}).Error
+			if err != nil {
+				return
+			}
+		}
+		return
+	})
 	return
 }
 

@@ -59,3 +59,25 @@ func FeatureListByRole(c *gin.Context) {
 	}
 	resp.Data(c, feas)
 }
+
+func UpdateRoleFeatures(c *gin.Context) {
+	var da = struct {
+		Rid  int
+		Fids []int
+	}{}
+	err := c.ShouldBindJSON(&da)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	if da.Rid == 0 {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("body rid miss")).Resp())
+		return
+	}
+	err = system.UpdateRoleFeatures(da.Rid, da.Fids)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	resp.Succ(c)
+}

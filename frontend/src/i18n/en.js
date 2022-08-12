@@ -27,6 +27,9 @@ const en = {
     feature: "feature",
     user: "user",
     look: "look",
+    save: "save",
+    success: "success",
+    visitor: "visitor",
 }
 
 export default en

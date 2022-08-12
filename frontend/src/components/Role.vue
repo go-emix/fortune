@@ -86,6 +86,20 @@ function localFeatures() {
     allfs.value = allfsVal
 }
 
+function saveRole() {
+    console.log(roleRow.value)
+    let keys = treeRef.value.getCheckedKeys()
+    console.log(keys)
+    ax({
+        url: "system/features",
+        method: "put",
+        data: {
+            rid: roleRow.value.id,
+            fids: keys
+        }
+    })
+}
+
 watch(locale, function () {
     localFeatures()
 })
@@ -119,8 +133,14 @@ featureList()
             :label="t('operate')"
             width="180">
             <template #default="scope">
-                <el-button type="text" @click="edit(scope.row)">{{ t('edit') }}</el-button>
-                <el-button type="text" @click="feature(scope.row)">{{ t('feature') }}</el-button>
+                <el-link v-if="scope.row.name!=='root'" type="primary"
+                         @click="edit(scope.row)" :underline="false">
+                    {{ t('edit') }}
+                </el-link>
+                <el-link v-if="scope.row.name!=='root'" type="primary"
+                         @click="feature(scope.row)" :underline="false">
+                    {{ t('feature') }}
+                </el-link>
             </template>
         </el-table-column>
     </el-table>
@@ -133,6 +153,7 @@ featureList()
             node-key="id"
             :props="{label:'name'}">
         </el-tree>
+        <el-button type="primary" @click="saveRole">{{ t("save") }}</el-button>
     </el-dialog>
 
 </template>
