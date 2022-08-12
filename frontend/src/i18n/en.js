@@ -26,6 +26,7 @@ const en = {
     edit: "edit",
     feature: "feature",
     user: "user",
+    look: "look",
 }
 
 export default en

@@ -1,14 +1,13 @@
 <script setup>
-import {ref} from "vue"
+import {ref, watch} from "vue"
 import {useI18n} from 'vue-i18n'
 import Left from './Left.vue'
 import ax from "../pkg/axios"
 import Top from "./Top.vue"
-import {ElTree} from 'element-plus'
 
 const list = ref([])
 
-const {t} = useI18n()
+const {t, locale} = useI18n()
 
 async function setList() {
     let da = await ax({
@@ -30,38 +29,49 @@ function edit(row) {
 
 const allfs = ref([])
 
-const fids = ref([])
-
 const featureDialog = ref(false)
 
-const treeRef = ref(ElTree)
+const treeRef = ref(null)
+
+const roleRow = ref(null)
 
 async function feature(row) {
+    roleRow.value = row
+    featureDialog.value = true
+}
+
+async function featureDialogOpen() {
     let feas = await ax({
-        url: "system/featureListByRole?role=" + row.id,
+        url: "system/featureListByRole?role=" + roleRow.value.id,
     })
     if (!feas) {
         return
     }
     let fidsVal = []
     for (let i = 0; i < feas.length; i++) {
-        fids.value.push(feas[i].id)
+        fidsVal.push(feas[i].id)
     }
-    console.log(treeRef.value)
     treeRef.value.setCheckedKeys(fidsVal)
-    featureDialog.value = true
 }
 
+let feaList = undefined
+
 async function featureList() {
-    let feaList = await ax({
+    feaList = await ax({
         url: "system/featureList"
     })
+    localFeatures()
+}
+
+function localFeatures() {
     if (!feaList) {
         return
     }
     let mp = new Map()
     for (let i = 0; i < feaList.length; i++) {
-        let fe = feaList[i]
+        // 对象拷贝
+        let fe = Object.assign({}, feaList[i])
+        fe.name = t(fe.name)
         let fs = mp.get(fe.menu.name)
         if (fs) {
             fs.push(fe)
@@ -71,10 +81,14 @@ async function featureList() {
     }
     let allfsVal = []
     for (let item of mp) {
-        allfsVal.push({name: item[0], children: item[1]})
+        allfsVal.push({name: t(item[0]), children: item[1]})
     }
     allfs.value = allfsVal
 }
+
+watch(locale, function () {
+    localFeatures()
+})
 
 setList()
 featureList()
@@ -111,7 +125,7 @@ featureList()
         </el-table-column>
     </el-table>
 
-    <el-dialog v-model="featureDialog">
+    <el-dialog v-model="featureDialog" @open="featureDialogOpen">
         <el-tree
             ref="treeRef"
             :data="allfs"
