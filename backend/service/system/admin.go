@@ -7,6 +7,7 @@ import (
 	"github.com/go-emix/fortune/backend/pkg/i18n"
 	"github.com/go-emix/fortune/backend/pkg/jwt"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 	"sort"
 )
 
@@ -172,5 +173,67 @@ func Apis(roles []int) (rs []Api, err error) {
 	for _, id := range aids {
 		rs = append(rs, m[id])
 	}
+	return
+}
+
+func AdminList() (as []Admin, err error) {
+	err = common.DB.Model(Admin{}).Find(&as).Error
+	return
+}
+
+func GetAdmin(aid int) (ad Admin, err error) {
+	ad.Id = aid
+	err = common.DB.First(&ad).Error
+	if err != nil {
+		return
+	}
+	ad.Roles = make([]Role, 0)
+	err = common.DB.Model(Role{}).Joins("join admin_role on "+
+		"admin_role.role=role.id and admin_role.admin=?", ad.Id).
+		Find(&ad.Roles).Error
+	return
+}
+
+func NewAdmin(ad Admin, rids []int) (err error) {
+	var c int64
+	common.DB.Model(Admin{}).Where("username=?", ad.Username).Count(&c)
+	if c != 0 {
+		err = errors.New("admin username already exist")
+		return
+	}
+	err = common.DB.Transaction(func(tx *gorm.DB) (err error) {
+		err = common.DB.Create(&ad).Error
+		if err != nil {
+			return
+		}
+		if len(rids) == 0 {
+			return nil
+		}
+		for _, rid := range rids {
+			err = common.DB.Create(&AdminRole{Admin: ad.Id, Role: rid}).Error
+			if err != nil {
+				return
+			}
+		}
+		return
+	})
+	return
+}
+
+func DeleteAdmin(aid int) (err error) {
+	var ad Admin
+	ad.Id = aid
+	err = common.DB.First(&ad).Error
+	if err != nil {
+		return
+	}
+	err = common.DB.Transaction(func(tx *gorm.DB) (err error) {
+		err = common.DB.Unscoped().Delete(&ad).Error
+		if err != nil {
+			return
+		}
+		err = common.DB.Model(AdminRole{}).Where("admin=?", aid).Unscoped().Delete(&ad).Error
+		return
+	})
 	return
 }

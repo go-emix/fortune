@@ -11,7 +11,7 @@ type Admin struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Nickname string `json:"nickname"`
-	Roles    []Role `gorm:"-"`
+	Roles    []Role `gorm:"-" json:"roles"`
 	// 是否启用
 	Enabled bool `json:"enabled"`
 }

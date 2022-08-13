@@ -39,3 +39,64 @@ func Features(c *gin.Context) {
 	}
 	resp.Data(c, feas)
 }
+
+func AdminList(c *gin.Context) {
+	as, err := system.AdminList()
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	resp.Data(c, as)
+}
+
+func NewAdmin(c *gin.Context) {
+	var da = struct {
+		Rids []int
+		system.Admin
+	}{}
+	err := c.ShouldBindJSON(&da)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	err = system.NewAdmin(da.Admin, da.Rids)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	resp.Succ(c)
+}
+
+func DeleteAdmin(c *gin.Context) {
+	var da = struct {
+		Id int `form:"id"`
+	}{}
+	err := c.ShouldBindQuery(&da)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	err = system.DeleteAdmin(da.Id)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	resp.Succ(c)
+}
+
+func GetAdmin(c *gin.Context) {
+	var da = struct {
+		Id int `form:"id"`
+	}{}
+	err := c.ShouldBindQuery(&da)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	ad, err := system.GetAdmin(da.Id)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	resp.Data(c, ad)
+}

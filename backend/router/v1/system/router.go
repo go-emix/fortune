@@ -15,7 +15,15 @@ func Register(r gin.IRouter) {
 	gr.GET("menus", system.LoginInterceptor, system.ApiInterceptor, system.Menus)
 	// 查询管理员的功能
 	gr.GET("features", system.LoginInterceptor, system.ApiInterceptor, system.Features)
+	// 查询管理员
+	gr.GET("admin", system.LoginInterceptor, system.ApiInterceptor, system.GetAdmin)
+	// 删除管理员
+	gr.DELETE("admin", system.LoginInterceptor, system.ApiInterceptor, system.DeleteAdmin)
+	// 新建管理员
+	gr.POST("admin", system.LoginInterceptor, system.ApiInterceptor, system.NewAdmin)
 
+	// 查询所有管理员
+	gr.GET("adminList", system.LoginInterceptor, system.ApiInterceptor, system.AdminList)
 	// 查询所有角色
 	gr.GET("roleList", system.LoginInterceptor, system.ApiInterceptor, system.RoleList)
 	// 查询所有功能
