@@ -1,5 +1,8 @@
+-- api
+
 delete
 from api;
+
 INSERT INTO api (id, name, `path`, `method`)
 VALUES (1, 'admin_menus', '/api/v1/system/menus', 'GET');
 INSERT INTO api (id, name, `path`, `method`)
@@ -18,6 +21,20 @@ INSERT INTO api (id, name, `path`, `method`)
 VALUES (8, 'put_role_features', '/api/v1/system/features', 'PUT');
 INSERT INTO api (id, name, `path`, `method`)
 VALUES (9, 'put_role_apis', '/api/v1/system/apis', 'PUT');
+INSERT INTO api (id, name, `path`, `method`)
+VALUES (10, 'admin_query', '/api/v1/system/admin', 'GET');
+INSERT INTO api (id, name, `path`, `method`)
+VALUES (11, 'admin_delete', '/api/v1/system/admin', 'DELETE');
+INSERT INTO api (id, name, `path`, `method`)
+VALUES (12, 'admin_add', '/api/v1/system/admin', 'POST');
+INSERT INTO api (id, name, `path`, `method`)
+VALUES (13, 'admin_list', '/api/v1/system/adminList', 'GET');
+INSERT INTO api (id, name, `path`, `method`)
+VALUES (14, 'role_add', '/api/v1/system/role', 'POST');
+INSERT INTO api (id, name, `path`, `method`)
+VALUES (15, 'role_delete', '/api/v1/system/role', 'DELETE');
+
+-- front_i18n
 
 delete
 from front_i18n;
@@ -113,4 +130,23 @@ INSERT INTO front_i18n (name, en, zh)
 VALUES ('put_role_features', 'put role features', '修改角色功能');
 INSERT INTO front_i18n (name, en, zh)
 VALUES ('i18n', 'en', 'zh');
-
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('nickname', 'nickname', '昵称');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('enabled', 'enabled', '启用');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('lower_role', 'role', '角色');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('list', 'list', '列表');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('admin_query', 'query admin', '查询管理员');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('admin_delete', 'delete admin', '删除管理员');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('admin_add', 'add admin', '添加管理员');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('admin_list', 'admin list', '管理员列表');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('role_add', 'add role', '添加角色');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('role_delete', 'delete role', '删除角色');

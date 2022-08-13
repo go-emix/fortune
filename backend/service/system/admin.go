@@ -202,6 +202,11 @@ func NewAdmin(ad Admin, rids []int) (err error) {
 		return
 	}
 	err = common.DB.Transaction(func(tx *gorm.DB) (err error) {
+		password, err := bcrypt.GenerateFromPassword([]byte(ad.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return
+		}
+		ad.Password = string(password)
 		err = common.DB.Create(&ad).Error
 		if err != nil {
 			return

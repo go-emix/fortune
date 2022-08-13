@@ -153,11 +153,51 @@ func Migrate() (err error) {
 	if err != nil {
 		return
 	}
-	lookAdmin := Feature{
-		Name: "look",
+	editAdmin := Feature{
+		Name: "edit",
 		Menu: adminMenu.Id,
 	}
-	err = common.DB.FirstOrCreate(&lookAdmin, lookAdmin).Error
+	err = common.DB.FirstOrCreate(&editAdmin, editAdmin).Error
+	if err != nil {
+		return
+	}
+	listAdmin := Feature{
+		Name: "list",
+		Menu: adminMenu.Id,
+	}
+	err = common.DB.FirstOrCreate(&listAdmin, listAdmin).Error
+	if err != nil {
+		return
+	}
+	addRole := Feature{
+		Name: "add",
+		Menu: roleMenu.Id,
+	}
+	err = common.DB.FirstOrCreate(&addRole, addRole).Error
+	if err != nil {
+		return
+	}
+	deleteRole := Feature{
+		Name: "delete",
+		Menu: roleMenu.Id,
+	}
+	err = common.DB.FirstOrCreate(&deleteRole, deleteRole).Error
+	if err != nil {
+		return
+	}
+	featureRole := Feature{
+		Name: "feature",
+		Menu: roleMenu.Id,
+	}
+	err = common.DB.FirstOrCreate(&featureRole, featureRole).Error
+	if err != nil {
+		return
+	}
+	listRole := Feature{
+		Name: "list",
+		Menu: roleMenu.Id,
+	}
+	err = common.DB.FirstOrCreate(&listRole, listRole).Error
 	if err != nil {
 		return
 	}

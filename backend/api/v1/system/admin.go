@@ -1,6 +1,7 @@
 package system
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-emix/fortune/backend/pkg/i18n"
 	"github.com/go-emix/fortune/backend/pkg/resp"
@@ -59,6 +60,18 @@ func NewAdmin(c *gin.Context) {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
 		return
 	}
+	if da.Username == "" {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("body username miss")).Resp())
+		return
+	}
+	if da.Password == "" {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("body password miss")).Resp())
+		return
+	}
+	if len(da.Rids) == 0 {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("body rids be empty")).Resp())
+		return
+	}
 	err = system.NewAdmin(da.Admin, da.Rids)
 	if err != nil {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
@@ -74,6 +87,14 @@ func DeleteAdmin(c *gin.Context) {
 	err := c.ShouldBindQuery(&da)
 	if err != nil {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	if da.Id == 0 {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("query id miss")).Resp())
+		return
+	}
+	if getUid(c) == da.Id {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("not allowed to delete self")).Resp())
 		return
 	}
 	err = system.DeleteAdmin(da.Id)

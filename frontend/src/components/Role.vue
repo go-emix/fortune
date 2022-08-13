@@ -5,10 +5,19 @@ import Left from './Left.vue'
 import ax from "../pkg/axios"
 import Top from "./Top.vue"
 import {Nerr} from "../pkg/notify"
+import {featureShow} from "../pkg/utils";
+import {useRoute} from "vue-router";
+import {getState} from "../pkg/session";
 
 const list = ref([])
 
 const {t, locale} = useI18n()
+
+let rou = useRoute()
+
+let feas = getState().features
+
+let show = ref(featureShow(feas, rou))
 
 async function setList() {
     let da = await ax({
@@ -97,9 +106,9 @@ async function featureDialogOpen() {
     let aln = apiListRef.value.length
     for (let i = 0; i < aln; i++) {
         let ra = apiListRef.value[i]
-        for (let i = 0; i < as.length; i++) {
-            if (ra.id === as[i].id) {
-                apiMultiple.value.toggleRowSelection(apiListRef.value[i])
+        for (let j = 0; j < as.length; j++) {
+            if (ra.id === as[j].id) {
+                apiMultiple.value.toggleRowSelection(ra)
                 break
             }
         }
@@ -191,8 +200,9 @@ apiList()
 <template>
     <Top></Top>
     <Left></Left>
-    <el-button type="success" @click="openRoleDialog">{{ t("new") }}</el-button>
+    <el-button type="success" v-if="show.add" @click="openRoleDialog">{{ t("new") }}</el-button>
     <el-table
+        v-if="show.list"
         :data="list"
         row-key="id"
         style="width: 100%"
@@ -213,15 +223,15 @@ apiList()
             :label="t('operate')"
             width="180">
             <template #default="scope">
-                <el-link v-if="scope.row.name!=='root'" type="primary"
+                <el-link v-if="show.feature&&scope.row.name!=='root'" type="primary"
                          @click="feature(scope.row)" :underline="false">
                     {{ t('feature') }}
                 </el-link>
-                <el-link v-if="scope.row.name!=='root'" type="danger"
+                <el-link v-if="show.feature&&scope.row.name!=='root'" type="danger"
                          @click="del(scope.row)" :underline="false">
                     {{ t('delete') }}
                 </el-link>
-                <span v-else style="color: #c8c9cb">{{ t('root_not_edit') }}</span>
+                <span v-if="scope.row.name==='root'" style="color: #c8c9cb">{{ t('root_not_edit') }}</span>
             </template>
         </el-table-column>
     </el-table>
