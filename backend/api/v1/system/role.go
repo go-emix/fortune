@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-emix/fortune/backend/pkg/i18n"
 	"github.com/go-emix/fortune/backend/pkg/resp"
-	"github.com/go-emix/fortune/backend/pkg/tianqi"
 	"github.com/go-emix/fortune/backend/service/system"
 )
 
@@ -16,18 +15,6 @@ func RoleList(c *gin.Context) {
 		return
 	}
 	resp.Data(c, menus)
-}
-
-func Tianqi(c *gin.Context) {
-	temp, err := tianqi.GetTemp()
-	if err != nil {
-		resp.Err(c, resp.Resp{
-			ErrCode: 2001,
-			ErrMsg:  err.Error(),
-		})
-		return
-	}
-	resp.Data(c, temp)
 }
 
 func FeatureList(c *gin.Context) {
@@ -127,6 +114,48 @@ func UpdateRoleApis(c *gin.Context) {
 		return
 	}
 	err = system.UpdateRoleApis(da.Rid, da.Aids)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	resp.Succ(c)
+}
+
+func NewRole(c *gin.Context) {
+	var da = struct {
+		Name string
+	}{}
+	err := c.ShouldBindJSON(&da)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	if da.Name == "" {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("body name miss")).Resp())
+		return
+	}
+	err = system.NewRole(da.Name)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	resp.Succ(c)
+}
+
+func DeleteRole(c *gin.Context) {
+	var da = struct {
+		Id int `form:"id"`
+	}{}
+	err := c.ShouldBindQuery(&da)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	if da.Id == 0 {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("query id miss")).Resp())
+		return
+	}
+	err = system.DeleteRole(da.Id)
 	if err != nil {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
 		return

@@ -4,6 +4,7 @@ import {useI18n} from 'vue-i18n'
 import Left from './Left.vue'
 import ax from "../pkg/axios"
 import Top from "./Top.vue"
+import {Nerr} from "../pkg/notify"
 
 const list = ref([])
 
@@ -23,8 +24,39 @@ function format(row, col, cell) {
     return t(cell)
 }
 
-function edit(row) {
-    console.log(row)
+async function del(row) {
+    await ax({
+        url: "system/role?id=" + row.id,
+        method: "delete"
+    })
+    await setList()
+}
+
+const roleForm = ref({})
+
+const roleDialog = ref(false)
+
+function openRoleDialog() {
+    roleDialog.value = true
+    roleForm.value = {}
+}
+
+async function newRole() {
+    let pat = /\w+/i
+    let name = roleForm.value.name;
+    if (!pat.test(name)) {
+        Nerr(t("must_be_alphanumeric"))
+        return
+    }
+    await ax({
+        url: "system/role",
+        method: "post",
+        data: {
+            name: name
+        }
+    })
+    roleDialog.value = false
+    await setList()
 }
 
 const allFs = ref([])
@@ -143,6 +175,7 @@ function saveRole() {
             aids: aids
         }
     })
+    featureDialog.value = false
 }
 
 watch(locale, function () {
@@ -158,6 +191,7 @@ apiList()
 <template>
     <Top></Top>
     <Left></Left>
+    <el-button type="success" @click="openRoleDialog">{{ t("new") }}</el-button>
     <el-table
         :data="list"
         row-key="id"
@@ -180,13 +214,14 @@ apiList()
             width="180">
             <template #default="scope">
                 <el-link v-if="scope.row.name!=='root'" type="primary"
-                         @click="edit(scope.row)" :underline="false">
-                    {{ t('edit') }}
-                </el-link>
-                <el-link v-if="scope.row.name!=='root'" type="primary"
                          @click="feature(scope.row)" :underline="false">
                     {{ t('feature') }}
                 </el-link>
+                <el-link v-if="scope.row.name!=='root'" type="danger"
+                         @click="del(scope.row)" :underline="false">
+                    {{ t('delete') }}
+                </el-link>
+                <span v-else style="color: #c8c9cb">{{ t('root_not_edit') }}</span>
             </template>
         </el-table-column>
     </el-table>
@@ -233,6 +268,15 @@ apiList()
         </el-tabs>
 
         <el-button type="primary" @click="saveRole">{{ t("save") }}</el-button>
+    </el-dialog>
+
+    <el-dialog v-model="roleDialog">
+        <el-form :model="roleForm">
+            <el-form-item :label="t('name')">
+                <el-input v-model="roleForm.name" :placeholder="t('must_be_alphanumeric')"/>
+            </el-form-item>
+        </el-form>
+        <el-button type="primary" @click="newRole">{{ t("save") }}</el-button>
     </el-dialog>
 
 </template>

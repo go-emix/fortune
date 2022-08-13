@@ -1,8 +1,17 @@
 import {createI18n} from 'vue-i18n'
-import {getState} from "./session";
+import {getState} from "./session"
+import ax from "axios"
 
-import en from '../i18n/en'
-import zh from '../i18n/zh'
+const env = import.meta.env
+
+let resp = await ax({
+    url: env.VITE_API_PATH + "system/i18n"
+})
+
+let data = resp.data.data;
+
+const en = data.en
+const zh = data.zh
 
 export const langs = [
     {

@@ -175,5 +175,8 @@ func Migrate() (err error) {
 	if err != nil {
 		return
 	}
+	// front_i18n init
+	emlogrus.Info("migrate front_i18n init")
+	err = common.DB.AutoMigrate(FrontI18N{})
 	return
 }

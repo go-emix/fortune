@@ -9,6 +9,7 @@ func Register(r gin.IRouter) {
 	gr := r.Group("system")
 	gr.POST("login", system.Login)
 	gr.GET("tq", system.Tianqi)
+	gr.GET("i18n", system.I18n)
 
 	// 查询管理员的菜单
 	gr.GET("menus", system.LoginInterceptor, system.ApiInterceptor, system.Menus)
@@ -30,5 +31,9 @@ func Register(r gin.IRouter) {
 	gr.PUT("features", system.LoginInterceptor, system.ApiInterceptor, system.UpdateRoleFeatures)
 	// 更新角色的api
 	gr.PUT("apis", system.LoginInterceptor, system.ApiInterceptor, system.UpdateRoleApis)
+	// 新建角色
+	gr.POST("role", system.LoginInterceptor, system.ApiInterceptor, system.NewRole)
+	// 删除角色
+	gr.DELETE("role", system.LoginInterceptor, system.ApiInterceptor, system.DeleteRole)
 
 }

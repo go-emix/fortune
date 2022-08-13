@@ -112,3 +112,14 @@ type RoleFeature struct {
 func (RoleFeature) TableName() string {
 	return "role_feature"
 }
+
+// FrontI18N 前端i18n
+type FrontI18N struct {
+	Name string
+	En   string
+	Zh   string
+}
+
+func (FrontI18N) TableName() string {
+	return "front_i18n"
+}

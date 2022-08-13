@@ -2,6 +2,8 @@ package system
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-emix/fortune/backend/pkg/resp"
+	"github.com/go-emix/fortune/backend/pkg/tianqi"
 	"github.com/go-emix/fortune/backend/service/system"
 )
 
@@ -21,4 +23,24 @@ func getRids(roles []system.Role) []int {
 		rids = append(rids, r.Id)
 	}
 	return rids
+}
+
+func Tianqi(c *gin.Context) {
+	temp, err := tianqi.GetTemp()
+	if err != nil {
+		resp.Err(c, resp.Resp{
+			ErrCode: 2001,
+			ErrMsg:  err.Error(),
+		})
+		return
+	}
+	resp.Data(c, temp)
+}
+
+func I18n(c *gin.Context) {
+	en, zh := system.I18n()
+	resp.Data(c, map[string]interface{}{
+		"zh": zh,
+		"en": en,
+	})
 }
