@@ -30,6 +30,10 @@ const zh = {
     save: "保存",
     success: "成功",
     visitor: "游客",
+    path: "路径",
+    method: "方法",
+    api: "接口",
+    admin_menus: "管理员菜单"
 }
 
 export default zh

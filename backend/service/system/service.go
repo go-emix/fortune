@@ -49,7 +49,7 @@ func Login(c *gin.Context, param LoginParam) (succ LoginSucc, ierr *i18n.Error) 
 	return
 }
 
-func Menus(roles []int) (rm []Menu, err error) {
+func Menus(roles []int) (rs []Menu, err error) {
 	if len(roles) == 0 {
 		err = errors.New("roles not empty")
 		return
@@ -60,22 +60,22 @@ func Menus(roles []int) (rm []Menu, err error) {
 		return
 	}
 	if root.Id == roles[0] {
-		err = common.DB.Model(Menu{}).Order("id").Find(&rm).Error
+		err = common.DB.Model(Menu{}).Order("id").Find(&rs).Error
 		return
 	}
 	for _, r := range roles {
 		menus := make([]Menu, 0)
-		err = common.DB.Model(Menu{}).Joins("right join role_menu on "+
+		err = common.DB.Model(Menu{}).Joins("join role_menu on "+
 			"menu.id=role_menu.menu and role_menu.role=?", r).
 			Find(&menus).Error
 		if err != nil {
 			return
 		}
-		rm = append(rm, menus...)
+		rs = append(rs, menus...)
 	}
 	m := make(map[int]Menu)
 	mids := make([]int, 0)
-	for _, menu := range rm {
+	for _, menu := range rs {
 		_, ok := m[menu.Id]
 		if !ok {
 			m[menu.Id] = menu
@@ -83,14 +83,14 @@ func Menus(roles []int) (rm []Menu, err error) {
 		}
 	}
 	sort.Ints(mids)
-	rm = make([]Menu, 0)
+	rs = make([]Menu, 0)
 	for _, mid := range mids {
-		rm = append(rm, m[mid])
+		rs = append(rs, m[mid])
 	}
 	return
 }
 
-func Features(roles []int) (rm []Feature, err error) {
+func Features(roles []int) (rs []Feature, err error) {
 	if len(roles) == 0 {
 		err = errors.New("roles not empty")
 		return
@@ -101,25 +101,25 @@ func Features(roles []int) (rm []Feature, err error) {
 		return
 	}
 	defer func() {
-		rm = SetMenuEntity(rm)
+		rs = SetMenuEntity(rs)
 	}()
 	if root.Id == roles[0] {
-		err = common.DB.Model(Feature{}).Order("id").Find(&rm).Error
+		err = common.DB.Model(Feature{}).Order("id").Find(&rs).Error
 		return
 	}
 	for _, r := range roles {
 		feas := make([]Feature, 0)
-		err = common.DB.Model(Feature{}).Joins("right join role_feature on "+
+		err = common.DB.Model(Feature{}).Joins("join role_feature on "+
 			"feature.id=role_feature.feature and role_feature.role=?", r).
 			Find(&feas).Error
 		if err != nil {
 			return
 		}
-		rm = append(rm, feas...)
+		rs = append(rs, feas...)
 	}
 	m := make(map[int]Feature)
 	fids := make([]int, 0)
-	for _, fea := range rm {
+	for _, fea := range rs {
 		_, ok := m[fea.Id]
 		if !ok {
 			m[fea.Id] = fea
@@ -127,9 +127,50 @@ func Features(roles []int) (rm []Feature, err error) {
 		}
 	}
 	sort.Ints(fids)
-	rm = make([]Feature, 0)
+	rs = make([]Feature, 0)
 	for _, fid := range fids {
-		rm = append(rm, m[fid])
+		rs = append(rs, m[fid])
+	}
+	return
+}
+
+func Apis(roles []int) (rs []Api, err error) {
+	if len(roles) == 0 {
+		err = errors.New("roles not empty")
+		return
+	}
+	root := Role{}
+	err = common.DB.Where("name=?", "root").First(&root).Error
+	if err != nil {
+		return
+	}
+	if root.Id == roles[0] {
+		err = common.DB.Model(Api{}).Order("id").Find(&rs).Error
+		return
+	}
+	for _, r := range roles {
+		as := make([]Api, 0)
+		err = common.DB.Model(Api{}).Joins("join role_api on "+
+			"api.id=role_api.api and role_api.role=?", r).
+			Find(&as).Error
+		if err != nil {
+			return
+		}
+		rs = append(rs, as...)
+	}
+	m := make(map[int]Api)
+	aids := make([]int, 0)
+	for _, a := range rs {
+		_, ok := m[a.Id]
+		if !ok {
+			m[a.Id] = a
+			aids = append(aids, a.Id)
+		}
+	}
+	sort.Ints(aids)
+	rs = make([]Api, 0)
+	for _, id := range aids {
+		rs = append(rs, m[id])
 	}
 	return
 }

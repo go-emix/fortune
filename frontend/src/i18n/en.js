@@ -30,6 +30,10 @@ const en = {
     save: "save",
     success: "success",
     visitor: "visitor",
+    path: "path",
+    method: "method",
+    api: "api",
+    admin_menus: "admin menus"
 }
 
 export default en

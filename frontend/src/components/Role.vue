@@ -27,16 +27,19 @@ function edit(row) {
     console.log(row)
 }
 
-const allfs = ref([])
+const allFs = ref([])
 
 const featureDialog = ref(false)
 
-const treeRef = ref(null)
+const feaTree = ref(null)
 
 const roleRow = ref(null)
 
+const featureDialogTitle = ref("role")
+
 async function feature(row) {
     roleRow.value = row
+    featureDialogTitle.value = row.name
     featureDialog.value = true
 }
 
@@ -51,16 +54,47 @@ async function featureDialogOpen() {
     for (let i = 0; i < feas.length; i++) {
         fidsVal.push(feas[i].id)
     }
-    treeRef.value.setCheckedKeys(fidsVal)
+    feaTree.value.setCheckedKeys(fidsVal)
+    let as = await ax({
+        url: "system/apiListByRole?role=" + roleRow.value.id,
+    })
+    if (!as) {
+        return
+    }
+    apiMultiple.value.clearSelection()
+    let aln = apiListRef.value.length
+    for (let i = 0; i < aln; i++) {
+        let ra = apiListRef.value[i]
+        for (let i = 0; i < as.length; i++) {
+            if (ra.id === as[i].id) {
+                apiMultiple.value.toggleRowSelection(apiListRef.value[i])
+                break
+            }
+        }
+    }
 }
 
 let feaList = undefined
+
+const apiListRef = ref([])
+
+const apiMultiple = ref(null)
 
 async function featureList() {
     feaList = await ax({
         url: "system/featureList"
     })
     localFeatures()
+}
+
+async function apiList() {
+    let da = await ax({
+        url: "system/apiList"
+    })
+    if (!da) {
+        return
+    }
+    apiListRef.value = da
 }
 
 function localFeatures() {
@@ -83,19 +117,30 @@ function localFeatures() {
     for (let item of mp) {
         allfsVal.push({name: t(item[0]), children: item[1]})
     }
-    allfs.value = allfsVal
+    allFs.value = allfsVal
 }
 
 function saveRole() {
-    console.log(roleRow.value)
-    let keys = treeRef.value.getCheckedKeys()
-    console.log(keys)
+    let keys = feaTree.value.getCheckedKeys()
     ax({
         url: "system/features",
         method: "put",
         data: {
             rid: roleRow.value.id,
             fids: keys
+        }
+    })
+    let rows = apiMultiple.value.getSelectionRows()
+    let aids = []
+    for (let i = 0; i < rows.length; i++) {
+        aids.push(rows[i].id)
+    }
+    ax({
+        url: "system/apis",
+        method: "put",
+        data: {
+            rid: roleRow.value.id,
+            aids: aids
         }
     })
 }
@@ -106,6 +151,7 @@ watch(locale, function () {
 
 setList()
 featureList()
+apiList()
 
 </script>
 
@@ -145,14 +191,47 @@ featureList()
         </el-table-column>
     </el-table>
 
-    <el-dialog v-model="featureDialog" @open="featureDialogOpen">
-        <el-tree
-            ref="treeRef"
-            :data="allfs"
-            show-checkbox
-            node-key="id"
-            :props="{label:'name'}">
-        </el-tree>
+    <el-dialog v-model="featureDialog" @open="featureDialogOpen"
+               :title="t(featureDialogTitle)">
+        <el-tabs active-name="feature">
+            <el-tab-pane :label="t('feature')" name="feature">
+                <el-tree
+                    ref="feaTree"
+                    :data="allFs"
+                    show-checkbox
+                    node-key="id"
+                    :props="{label:'name'}">
+                </el-tree>
+            </el-tab-pane>
+            <el-tab-pane :label="t('api')" name="api">
+                <el-table
+                    ref="apiMultiple"
+                    :data="apiListRef"
+                    row-key="id"
+                    style="width: 100%"
+                    border>
+                    <el-table-column type="selection" width="55"/>
+                    <el-table-column
+                        prop="id"
+                        label="ID">
+                    </el-table-column>
+                    <el-table-column
+                        prop="name"
+                        :label="t('name')"
+                        :formatter="format">
+                    </el-table-column>
+                    <el-table-column
+                        prop="path"
+                        :label="t('path')">
+                    </el-table-column>
+                    <el-table-column
+                        prop="method"
+                        :label="t('method')">
+                    </el-table-column>
+                </el-table>
+            </el-tab-pane>
+        </el-tabs>
+
         <el-button type="primary" @click="saveRole">{{ t("save") }}</el-button>
     </el-dialog>
 

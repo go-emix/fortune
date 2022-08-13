@@ -7,13 +7,13 @@ type LoginParam struct {
 
 // Admin 管理员
 type Admin struct {
-	Id       int
-	Username string
-	Password string
-	Nickname string
+	Id       int    `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Nickname string `json:"nickname"`
 	Roles    []Role `gorm:"-"`
 	// 是否启用
-	Enabled bool
+	Enabled bool `json:"enabled"`
 }
 
 func (Admin) TableName() string {
@@ -72,9 +72,10 @@ func (AdminRole) TableName() string {
 }
 
 type Api struct {
-	Id   int
-	Name string
-	Path string
+	Id     int    `json:"id"`
+	Name   string `json:"name"`
+	Path   string `json:"path"`
+	Method string `json:"method"`
 }
 
 func (Api) TableName() string {

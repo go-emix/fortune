@@ -2,6 +2,7 @@ package system
 
 import (
 	emlogrus "github.com/go-emix/emix-logrus"
+	"github.com/go-emix/fortune/backend/pkg/casbin"
 	"github.com/go-emix/fortune/backend/pkg/common"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -202,9 +203,15 @@ func UpdateRoleFeatures(roleId int, fids []int) (err error) {
 		if len(fs) == 0 {
 			return nil
 		}
+		// 菜单去重
 		mids := make([]int, 0)
+		midmp := make(map[int]int)
 		for _, f := range fs {
-			mids = append(mids, f.Menu)
+			_, ok := midmp[f.Menu]
+			if !ok {
+				midmp[f.Menu] = 0
+				mids = append(mids, f.Menu)
+			}
 		}
 		err = common.DB.Where("role=?", roleId).Unscoped().Delete(RoleMenu{}).Error
 		if err != nil {
@@ -245,5 +252,58 @@ func FeatureList() (rm []Feature, err error) {
 		rm = SetMenuEntity(rm)
 	}()
 	err = common.DB.Model(Feature{}).Find(&rm).Error
+	return
+}
+
+func ApiList() (rs []Api, err error) {
+	err = common.DB.Model(Api{}).Find(&rs).Error
+	return
+}
+
+func UpdateRoleApis(roleId int, aids []int) (err error) {
+	err = common.DB.Transaction(func(tx *gorm.DB) (err error) {
+		role := Role{Id: roleId}
+		err = common.DB.Find(&role).Error
+		if err != nil {
+			return
+		}
+		if len(aids) == 0 {
+			err = common.DB.Where("role=?", roleId).Unscoped().Delete(RoleApi{}).Error
+			if err != nil {
+				return err
+			}
+			_, err = casbin.Enforcer.RemoveFilteredPolicy(0, role.Name)
+			return
+		}
+		as := make([]Api, 0)
+		err = common.DB.Model(Api{}).Where("id in (?)", aids).Find(&as).Error
+		if err != nil {
+			return
+		}
+		if len(as) == 0 {
+			return nil
+		}
+		err = common.DB.Where("role=?", roleId).Unscoped().Delete(RoleApi{}).Error
+		if err != nil {
+			return
+		}
+		rules := make([][]string, 0)
+		for _, a := range as {
+			err = common.DB.Create(&RoleApi{Role: roleId, Api: a.Id}).Error
+			if err != nil {
+				return
+			}
+			rules = append(rules, []string{role.Name, a.Path, a.Method})
+		}
+		if err != nil {
+			return
+		}
+		_, err = casbin.Enforcer.RemoveFilteredPolicy(0, role.Name)
+		if err != nil {
+			return err
+		}
+		_, err = casbin.Enforcer.AddPolicies(rules)
+		return
+	})
 	return
 }
