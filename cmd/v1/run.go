@@ -29,7 +29,6 @@ func run() *cobra.Command {
 			return
 		}
 		common.RunMode = common.Mode(config.AppC.Mode)
-		config.ExeSql()
 		common.Resps = config.AppC.Resps
 		common.DB = config.GetDb()
 		jwt.Initialize(config.AppC.Jwt.SignKey, config.AppC.Jwt.Expire)
@@ -43,6 +42,7 @@ func run() *cobra.Command {
 			cmd.Println(err.Error())
 			return
 		}
+		config.ExeSql()
 		err = casbin.Initialize()
 		if err != nil {
 			cmd.Println(err.Error())

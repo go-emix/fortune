@@ -33,7 +33,15 @@ const en = {
     path: "path",
     method: "method",
     api: "api",
-    admin_menus: "admin menus"
+    admin_menus: "admin menus",
+    admin_features: "admin features",
+    role_list: "role list",
+    feature_list: "feature list",
+    api_list: "api list",
+    role_feature_list: "role feature list",
+    role_api_list: "role api list",
+    put_role_features: "put role features",
+    put_role_apis: "put role apis",
 }
 
 export default en
