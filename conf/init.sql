@@ -28,11 +28,13 @@ VALUES (11, 'admin_delete', '/api/v1/system/admin', 'DELETE');
 INSERT INTO api (id, name, `path`, `method`)
 VALUES (12, 'admin_add', '/api/v1/system/admin', 'POST');
 INSERT INTO api (id, name, `path`, `method`)
-VALUES (13, 'admin_list', '/api/v1/system/adminList', 'GET');
+VALUES (13, 'admin_edit', '/api/v1/system/admin', 'PUT');
 INSERT INTO api (id, name, `path`, `method`)
-VALUES (14, 'role_add', '/api/v1/system/role', 'POST');
+VALUES (14, 'admin_list', '/api/v1/system/adminList', 'GET');
 INSERT INTO api (id, name, `path`, `method`)
-VALUES (15, 'role_delete', '/api/v1/system/role', 'DELETE');
+VALUES (15, 'role_add', '/api/v1/system/role', 'POST');
+INSERT INTO api (id, name, `path`, `method`)
+VALUES (16, 'role_delete', '/api/v1/system/role', 'DELETE');
 
 -- front_i18n
 
@@ -144,6 +146,8 @@ INSERT INTO front_i18n (name, en, zh)
 VALUES ('admin_delete', 'delete admin', '删除管理员');
 INSERT INTO front_i18n (name, en, zh)
 VALUES ('admin_add', 'add admin', '添加管理员');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('admin_edit', 'edit admin', '编辑管理员');
 INSERT INTO front_i18n (name, en, zh)
 VALUES ('admin_list', 'admin list', '管理员列表');
 INSERT INTO front_i18n (name, en, zh)

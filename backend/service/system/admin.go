@@ -195,6 +195,9 @@ func GetAdmin(aid int) (ad Admin, err error) {
 }
 
 func NewAdmin(ad Admin, rids []int) (err error) {
+	if len(rids) == 0 {
+		return errors.New("rids not be empty")
+	}
 	var c int64
 	common.DB.Model(Admin{}).Where("username=?", ad.Username).Count(&c)
 	if c != 0 {
@@ -210,9 +213,6 @@ func NewAdmin(ad Admin, rids []int) (err error) {
 		err = common.DB.Create(&ad).Error
 		if err != nil {
 			return
-		}
-		if len(rids) == 0 {
-			return nil
 		}
 		for _, rid := range rids {
 			err = common.DB.Create(&AdminRole{Admin: ad.Id, Role: rid}).Error
@@ -237,7 +237,43 @@ func DeleteAdmin(aid int) (err error) {
 		if err != nil {
 			return
 		}
-		err = common.DB.Model(AdminRole{}).Where("admin=?", aid).Unscoped().Delete(&ad).Error
+		err = common.DB.Where("admin=?", aid).Unscoped().Delete(AdminRole{}).Error
+		return
+	})
+	return
+}
+
+func UpdateAdmin(ad Admin, rids []int) (err error) {
+	if len(rids) == 0 {
+		return errors.New("rids not be empty")
+	}
+	if ad.Password != "" {
+		var pass []byte
+		pass, err = bcrypt.GenerateFromPassword([]byte(ad.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return
+		}
+		ad.Password = string(pass)
+	}
+	err = common.DB.Transaction(func(tx *gorm.DB) (err error) {
+		if ad.Password == "" {
+			err = common.DB.Omit("password").Save(&ad).Error
+		} else {
+			err = common.DB.Save(&ad).Error
+		}
+		if err != nil {
+			return
+		}
+		err = common.DB.Where("admin=?", ad.Id).Unscoped().Delete(AdminRole{}).Error
+		if err != nil {
+			return
+		}
+		for _, rid := range rids {
+			err = common.DB.Create(&AdminRole{Admin: ad.Id, Role: rid}).Error
+			if err != nil {
+				return
+			}
+		}
 		return
 	})
 	return

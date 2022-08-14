@@ -32,12 +32,20 @@ instance.interceptors.response.use(function (resp) {
     }
     let code = data.errcode
     if (code !== 0) {
-        Nerr(code + " : " + data.errmsg)
         if (code === 1004) {
+            Nerr(code + " : " + data.errmsg)
             setTimeout(function () {
                 exit()
             }, 1500)
+            return
+        } else if (code === 1005) {
+            let url = resp.config.url
+            let method = resp.config.method
+            let msg = method + " " + url
+            Nerr(code + " : " + msg + " " + data.errmsg)
+            return
         }
+        Nerr(code + " : " + data.errmsg)
         return
     }
     let rdata = data.data

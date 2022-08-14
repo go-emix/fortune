@@ -163,7 +163,7 @@ func DeleteRole(rid int) (err error) {
 		return
 	}
 	err = common.DB.Transaction(func(tx *gorm.DB) (err error) {
-		err = common.DB.Unscoped().Delete(r).Error
+		err = common.DB.Unscoped().Delete(&r).Error
 		if err != nil {
 			return
 		}

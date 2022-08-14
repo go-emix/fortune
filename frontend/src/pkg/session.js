@@ -9,8 +9,8 @@ export function saveState(obj) {
     for (const k in obj) {
         let value = obj[k];
         switch (k) {
-            case "token":
-                state.token = value
+            case "admin":
+                state.admin = value
                 break
             case "i18n":
                 state.i18n = value
@@ -31,9 +31,12 @@ export function getState() {
     if (!state) {
         return state
     }
-    return JSON.parse(state);
+    try {
+        return JSON.parse(state);
+    } catch (e) {
+        exit()
+    }
 }
-
 
 export function clearState() {
     Cookies.remove("state")

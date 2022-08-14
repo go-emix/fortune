@@ -47,7 +47,11 @@ func AdminList(c *gin.Context) {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
 		return
 	}
-	resp.Data(c, as)
+	admins := make([]system.SimpleAdmin, 0)
+	for _, a := range as {
+		admins = append(admins, a.ToSimple())
+	}
+	resp.Data(c, admins)
 }
 
 func NewAdmin(c *gin.Context) {
@@ -119,5 +123,35 @@ func GetAdmin(c *gin.Context) {
 		resp.Err(c, i18n.NewErr(c, "", err).Resp())
 		return
 	}
-	resp.Data(c, ad)
+	resp.Data(c, ad.ToSimple())
+}
+
+func UpdateAdmin(c *gin.Context) {
+	var da = struct {
+		Rids []int
+		system.Admin
+	}{}
+	err := c.ShouldBindJSON(&da)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	if da.Username == "" {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("body username miss")).Resp())
+		return
+	}
+	if da.Id == 0 {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("body id miss")).Resp())
+		return
+	}
+	if len(da.Rids) == 0 {
+		resp.Err(c, i18n.NewErr(c, "", errors.New("body rids be empty")).Resp())
+		return
+	}
+	err = system.UpdateAdmin(da.Admin, da.Rids)
+	if err != nil {
+		resp.Err(c, i18n.NewErr(c, "", err).Resp())
+		return
+	}
+	resp.Succ(c)
 }

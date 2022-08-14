@@ -39,12 +39,25 @@ async function del(row) {
 
 const adminDialog = ref(false)
 
+const adminEditDialog = ref(false)
+
 const adminForm = ref({})
 
 function openAdminDialog() {
     adminDialog.value = true
     adminForm.value = {}
     adminForm.value.enabled = true
+}
+
+async function edit(row) {
+    adminEditDialog.value = true
+    let da = await ax({
+        url: "system/admin?id=" + row.id,
+    })
+    if (!da) {
+        return
+    }
+    adminForm.value = da
 }
 
 async function newAdmin() {
@@ -63,7 +76,7 @@ async function newAdmin() {
         Nerr(t("password") + " " + t("not_empty"))
         return
     }
-    if (value.rids.length === 0) {
+    if (!value.rids || value.rids.length === 0) {
         Nerr(t("lower_role") + " " + t("not_empty"))
         return
     }
@@ -79,6 +92,32 @@ async function newAdmin() {
         }
     })
     adminDialog.value = false
+    await setList()
+}
+
+async function editAdmin() {
+    let value = adminForm.value;
+    if (!value.rids || value.rids.length === 0) {
+        Nerr(t("lower_role") + " " + t("not_empty"))
+        return
+    }
+    let pass = ""
+    if (value.password && value.password !== "") {
+        pass = value.password
+    }
+    await ax({
+        url: "system/admin",
+        method: "put",
+        data: {
+            id: value.id,
+            username: value.username,
+            password: pass,
+            enabled: value.enabled,
+            rids: value.rids,
+            nickname: value.nickname
+        }
+    })
+    adminEditDialog.value = false
     await setList()
 }
 
@@ -173,6 +212,38 @@ roleList()
             </el-form-item>
         </el-form>
         <el-button type="primary" @click="newAdmin">{{ t("save") }}</el-button>
+    </el-dialog>
+
+    <el-dialog v-model="adminEditDialog">
+        <el-form :model="adminForm">
+            <el-form-item :label="t('username')">
+                <el-input v-model="adminForm.username" disabled/>
+            </el-form-item>
+            <el-form-item :label="t('password')">
+                <el-input v-model="adminForm.password" type="password" autocomplete="new-password"/>
+            </el-form-item>
+            <el-form-item :label="t('nickname')">
+                <el-input v-model="adminForm.nickname"/>
+            </el-form-item>
+            <el-form-item :label="t('enabled')">
+                <el-switch v-model="adminForm.enabled"/>
+            </el-form-item>
+            <el-form-item>
+                <el-select
+                    v-model="adminForm.rids"
+                    multiple
+                    :placeholder="t('lower_role')"
+                    style="width: 240px">
+                    <el-option
+                        v-for="item in roles"
+                        :key="item.id"
+                        :label="t(item.name)"
+                        :value="item.id"
+                    />
+                </el-select>
+            </el-form-item>
+        </el-form>
+        <el-button type="primary" @click="editAdmin">{{ t("save") }}</el-button>
     </el-dialog>
 
 </template>

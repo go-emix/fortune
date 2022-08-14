@@ -20,6 +20,28 @@ func (Admin) TableName() string {
 	return "admin"
 }
 
+func (r Admin) ToSimple() SimpleAdmin {
+	var sa = SimpleAdmin{
+		Id:       r.Id,
+		Username: r.Username,
+		Nickname: r.Nickname,
+		Enabled:  r.Enabled,
+		Rids:     make([]int, 0),
+	}
+	for _, r := range r.Roles {
+		sa.Rids = append(sa.Rids, r.Id)
+	}
+	return sa
+}
+
+type SimpleAdmin struct {
+	Id       int    `json:"id"`
+	Username string `json:"username"`
+	Nickname string `json:"nickname"`
+	Rids     []int  ` json:"rids"`
+	Enabled  bool   `json:"enabled"`
+}
+
 type LoginSucc struct {
 	Id       int    `json:"id"`
 	Token    string `json:"token"`

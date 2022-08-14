@@ -21,6 +21,8 @@ app:
       errcode: 1003
     - name: token_expired
       errcode: 1004
+    - name: permission_denied
+      errcode: 1005
   i18n: conf/i18n
 server:
   port: 3678

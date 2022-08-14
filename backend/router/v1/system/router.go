@@ -21,6 +21,8 @@ func Register(r gin.IRouter) {
 	gr.DELETE("admin", system.LoginInterceptor, system.ApiInterceptor, system.DeleteAdmin)
 	// 新建管理员
 	gr.POST("admin", system.LoginInterceptor, system.ApiInterceptor, system.NewAdmin)
+	// 修改管理员
+	gr.PUT("admin", system.LoginInterceptor, system.ApiInterceptor, system.UpdateAdmin)
 
 	// 查询所有管理员
 	gr.GET("adminList", system.LoginInterceptor, system.ApiInterceptor, system.AdminList)
