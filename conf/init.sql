@@ -154,3 +154,5 @@ INSERT INTO front_i18n (name, en, zh)
 VALUES ('role_add', 'add role', '添加角色');
 INSERT INTO front_i18n (name, en, zh)
 VALUES ('role_delete', 'delete role', '删除角色');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('clean', 'clean', '清除');

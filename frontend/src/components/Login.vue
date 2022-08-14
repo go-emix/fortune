@@ -57,33 +57,87 @@ async function tq() {
     Nsucc(da)
 }
 
+function clean() {
+    form.value = {}
+}
+
+
 </script>
 
 <template>
-    <el-form :model="form" label-width="80px">
-        <el-form-item :label="t('username')">
-            <el-input v-model="form.username"></el-input>
-        </el-form-item>
-        <el-form-item :label="t('password')">
-            <el-input v-model="form.password" type="password"></el-input>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="login">{{ t("login") }}</el-button>
-        </el-form-item>
-    </el-form>
+    <el-container class="container">
+        <el-main id="main">
+            <el-form :model="form" label-width="80px" class="form">
+                <el-form-item :label="t('username')" class="item">
+                    <el-input v-model="form.username" class="input"></el-input>
+                </el-form-item>
+                <el-form-item :label="t('password')" class="item">
+                    <el-input v-model="form.password" type="password" class="input"></el-input>
+                </el-form-item>
+                <el-form-item class="item">
+                    <el-button type="primary" @click="login" style="margin-left: 20px">{{ t("login") }}</el-button>
+                    <el-button @click="clean" style="margin-left: 30px">{{ t("clean") }}</el-button>
+                </el-form-item>
+            </el-form>
 
-    <el-select v-model="locale" @change="syncI18n">
-        <el-option
-            v-for="item in langs"
-            :key="item.i18n"
-            :label="item.lang"
-            :value="item.i18n">
-        </el-option>
-    </el-select>
-    <el-button @click="tq">{{ t("tq") }}</el-button>
-
+            <div class="div">
+                <el-select v-model="locale" @change="syncI18n" class="select">
+                    <el-option
+                        v-for="item in langs"
+                        :key="item.i18n"
+                        :label="item.lang"
+                        :value="item.i18n">
+                    </el-option>
+                </el-select>
+                <el-button @click="tq">{{ t("tq") }}</el-button>
+            </div>
+        </el-main>
+    </el-container>
 </template>
 
 <style scoped>
+
+.container {
+    width: 100%;
+    background: #babaeb;
+    height: 100%;
+}
+
+.input {
+    width: 250px;
+}
+
+.item {
+    margin-top: 20px;
+}
+
+.div {
+    width: 460px;
+    margin: -40px auto auto;
+    padding-left: 10%;
+}
+
+.select {
+    margin-right: 20px;
+}
+
+.form {
+    width: 460px;
+    margin: 10% auto 5%;
+    padding-top: 20px;
+    padding-left: 50px;
+    background: hsla(0, 0%, 100%, 0.2);
+    padding-bottom: 20px;
+}
+
+.form::before {
+    content: '';
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    filter: blur(20px);
+}
 
 </style>

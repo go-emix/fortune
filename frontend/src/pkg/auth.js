@@ -2,14 +2,10 @@ import {exit, getState} from "./session"
 
 export function isLogin() {
     let state = getState();
-    if (!state) {
+    if (!state || !state.admin) {
         return false
     }
-    try {
-        return state.admin.token
-    } catch (e) {
-        exit()
-    }
+    return state.admin.token
 }
 
 export function isPermit(to) {
