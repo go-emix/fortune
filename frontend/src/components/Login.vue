@@ -19,6 +19,8 @@ function syncI18n(va) {
     saveState({i18n: va})
 }
 
+const fullscreenLoading = ref(false)
+
 async function login() {
     if (!form.value.username) {
         Nerr(t('username') + ' ' + t('not_empty'))
@@ -28,6 +30,7 @@ async function login() {
         Nerr(t('password') + ' ' + t('not_empty'))
         return
     }
+    fullscreenLoading.value = true
     let da = await ax({
         url: "system/login",
         method: "post",
@@ -75,7 +78,9 @@ function clean() {
                     <el-input v-model="form.password" type="password" class="input"></el-input>
                 </el-form-item>
                 <el-form-item class="item">
-                    <el-button type="primary" @click="login" style="margin-left: 20px">{{ t("login") }}</el-button>
+                    <el-button type="primary" @click="login" style="margin-left: 20px"
+                               v-loading.fullscreen.lock="fullscreenLoading">{{ t("login") }}
+                    </el-button>
                     <el-button @click="clean" style="margin-left: 30px">{{ t("clean") }}</el-button>
                 </el-form-item>
             </el-form>
