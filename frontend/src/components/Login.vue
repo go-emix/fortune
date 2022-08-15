@@ -37,6 +37,7 @@ async function login() {
         data: form.value
     })
     if (!da) {
+        fullscreenLoading.value = false
         return
     }
     saveState({admin: da})
@@ -133,6 +134,7 @@ function clean() {
     padding-left: 50px;
     background: hsla(0, 0%, 100%, 0.2);
     padding-bottom: 20px;
+    border-radius: 15px;
 }
 
 .form::before {
