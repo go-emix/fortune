@@ -1,7 +1,5 @@
 <script setup>
 import {useI18n} from 'vue-i18n'
-import Left from './Left.vue'
-import Top from "./Top.vue"
 import {getState} from "../pkg/session"
 import {useRoute} from "vue-router"
 import {ref} from "vue"
@@ -141,8 +139,6 @@ roleList()
 </script>
 
 <template>
-    <Top></Top>
-    <Left></Left>
     <el-button v-if="show.add" type="success" @click="openAdminDialog">{{ t("new") }}</el-button>
     <el-table
         v-if="show.list"

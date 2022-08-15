@@ -5,6 +5,7 @@ import {isLogin} from "./auth"
 import Login from "../components/Login.vue"
 import NotFound from "../components/NotFound.vue"
 import Role from "../components/Role.vue"
+import Main from "../components/Main.vue"
 import {saveState} from "./session"
 
 export default async function init(router) {
@@ -40,6 +41,11 @@ export default async function init(router) {
         path: '/:pathMatch(.*)*',
         name: 'notFound', component: NotFound
     })
+    let main = {
+        name: "main", path: "",
+        component: Main,
+        children: []
+    }
     for (let i = 0; i < menu.length; i++) {
         let vc = toVueComponent(menu[i].component)
         if (vc) {
@@ -49,9 +55,10 @@ export default async function init(router) {
                 menu[i].meta = {id: menu[i].id}
                 menu[i].meta.auth = au
             }
-            router.addRoute(menu[i])
+            main.children.push(menu[i])
         }
     }
+    router.addRoute(main)
 }
 
 function toVueComponent(com) {

@@ -4,7 +4,7 @@ import ax from '../pkg/axios'
 import {Nerr, Nsucc} from '../pkg/notify'
 import {useI18n} from 'vue-i18n'
 import {langs} from '../pkg/i18n'
-import {saveState} from "../pkg/session"
+import {exit, saveState} from "../pkg/session"
 import {useRouter} from 'vue-router'
 import menu from '../pkg/menu'
 import feature from '../pkg/feature'
@@ -47,8 +47,12 @@ async function login() {
     }
     await menu(router)
     await feature()
-    await router.push({name: "dashboard"})
-    Nsucc(t("welcome") + " " + msg)
+    try {
+        await router.push({name: "dashboard"})
+        Nsucc(t("welcome") + " " + msg)
+    } catch (e) {
+        exit()
+    }
 }
 
 async function tq() {

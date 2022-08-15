@@ -1,9 +1,7 @@
 <script setup>
 import {ref, watch} from "vue"
 import {useI18n} from 'vue-i18n'
-import Left from './Left.vue'
 import ax from "../pkg/axios"
-import Top from "./Top.vue"
 import {Nerr} from "../pkg/notify"
 import {featureShow} from "../pkg/utils";
 import {useRoute} from "vue-router";
@@ -198,8 +196,6 @@ apiList()
 </script>
 
 <template>
-    <Top></Top>
-    <Left></Left>
     <el-button type="success" v-if="show.add" @click="openRoleDialog">{{ t("new") }}</el-button>
     <el-table
         v-if="show.list"
