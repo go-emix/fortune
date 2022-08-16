@@ -189,6 +189,9 @@ watch(locale, function () {
     localFeatures()
 })
 
+const headCellStyle = ref({background: '#8f8fbe', color: 'white'})
+const cellStyle = ref({background: '#eef7f5'})
+
 setList()
 featureList()
 apiList()
@@ -196,13 +199,17 @@ apiList()
 </script>
 
 <template>
-    <el-button type="success" v-if="show.add" @click="openRoleDialog">{{ t("new") }}</el-button>
+    <el-button type="success" v-if="show.add" @click="openRoleDialog"
+               class="new">{{ t("new") }}
+    </el-button>
     <el-table
         v-if="show.list"
         :data="list"
         row-key="id"
-        style="width: 100%"
-        border>
+        :header-cell-style="headCellStyle"
+        :cell-style="cellStyle"
+        class="table"
+        stripe>
         <el-table-column
             prop="id"
             label="ID"
@@ -289,4 +296,16 @@ apiList()
 
 <style scoped>
 
+.table {
+    margin-top: 30px;
+    margin-left: 10%;
+    width: 540px;
+    background: transparent;
+}
+
+.new {
+    margin-left: 10%;
+    margin-top: 20px;
+
+}
 </style>

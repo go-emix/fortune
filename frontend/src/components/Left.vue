@@ -32,7 +32,10 @@ setShow()
 <template>
     <el-menu
         :default-active="active"
-        @select="select">
+        @select="select"
+        text-color="#fff"
+        background-color="#494986"
+        active-text-color="#4ac927">
         <el-menu-item index="dashboard" v-if="show.dashboard">
             <span slot="title">{{ t("dashboard") }}</span>
         </el-menu-item>

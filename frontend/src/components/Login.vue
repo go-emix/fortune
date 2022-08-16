@@ -128,7 +128,9 @@ function clean() {
 }
 
 .select {
-    margin-right: 20px;
+    width: 80px;
+    margin-right: 30px;
+    margin-left: 12%;
 }
 
 .form {

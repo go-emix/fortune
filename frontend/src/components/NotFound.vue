@@ -6,9 +6,12 @@ const {t} = useI18n()
 </script>
 
 <template>
-    <div>{{ t("not_found") }}</div>
+    <el-empty :description=" t('not_found')" class="empty"/>
 </template>
 
 <style scoped>
-
+.empty {
+    width: 100%;
+    height: 100%;
+}
 </style>
