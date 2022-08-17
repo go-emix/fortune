@@ -203,21 +203,21 @@ roleList()
 
         <el-dialog v-model="adminDialog" custom-class="adminDialog">
             <el-form :model="adminForm">
-                <el-form-item :label="t('username')" label-width="70px">
+                <el-form-item :label="t('username')" label-width="80px">
                     <el-input v-model="adminForm.username" :placeholder="t('must_be_alphanumeric')"
                               class="input"/>
                 </el-form-item>
-                <el-form-item :label="t('password')" label-width="70px">
+                <el-form-item :label="t('password')" label-width="80px">
                     <el-input v-model="adminForm.password" type="password"
                               class="input" autocomplete="new-password"/>
                 </el-form-item>
-                <el-form-item :label="t('nickname')" label-width="70px">
+                <el-form-item :label="t('nickname')" label-width="80px">
                     <el-input v-model="adminForm.nickname" class="input"/>
                 </el-form-item>
-                <el-form-item :label="t('enabled')" label-width="70px">
+                <el-form-item :label="t('enabled')" label-width="80px">
                     <el-switch v-model="adminForm.enabled" class="input"/>
                 </el-form-item>
-                <el-form-item :label="t('lower_role')" label-width="70px">
+                <el-form-item :label="t('lower_role')" label-width="80px">
                     <el-select
                         v-model="adminForm.rids"
                         multiple
@@ -238,20 +238,20 @@ roleList()
 
         <el-dialog v-model="adminEditDialog" custom-class="adminEditDialog">
             <el-form :model="adminForm">
-                <el-form-item :label="t('username')" label-width="70px">
+                <el-form-item :label="t('username')" label-width="80px">
                     <el-input v-model="adminForm.username" disabled class="input"/>
                 </el-form-item>
-                <el-form-item :label="t('password')" label-width="70px">
+                <el-form-item :label="t('password')" label-width="80px">
                     <el-input v-model="adminForm.password" type="password" autocomplete="new-password"
                               class="input"/>
                 </el-form-item>
-                <el-form-item :label="t('nickname')" label-width="70px">
+                <el-form-item :label="t('nickname')" label-width="80px">
                     <el-input v-model="adminForm.nickname" class="input"/>
                 </el-form-item>
-                <el-form-item :label="t('enabled')" label-width="70px">
+                <el-form-item :label="t('enabled')" label-width="80px">
                     <el-switch v-model="adminForm.enabled" class="input"/>
                 </el-form-item>
-                <el-form-item :label="t('lower_role')" label-width="70px">
+                <el-form-item :label="t('lower_role')" label-width="80px">
                     <el-select
                         v-model="adminForm.rids"
                         multiple
