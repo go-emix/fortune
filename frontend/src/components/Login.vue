@@ -153,4 +153,9 @@ function clean() {
     filter: blur(20px);
 }
 
+:deep(.el-input__inner) {
+    background: #babaeb;
+    color: white;
+}
+
 </style>

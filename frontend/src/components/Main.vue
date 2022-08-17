@@ -1,11 +1,17 @@
 <script setup>
 import {RouterView} from 'vue-router'
 import Top from './Top.vue'
-import Left from './Left.vue'</script>
+import Left from './Left.vue'
+import {useI18n} from "vue-i18n";
+
+const {t} = useI18n()
+
+</script>
 
 <template class="app">
     <el-container class="container back">
         <el-header class="header back">
+            <div class="system">{{ t("fortune") }}</div>
             <div class="top">
                 <Top></Top>
             </div>
@@ -64,6 +70,14 @@ import Left from './Left.vue'</script>
 .main {
     background: #b4becb;
     border-radius: 10px;
+}
+
+.system {
+    margin-top: 20px;
+    margin-left: 20px;
+    color: white;
+    float: left;
+    font-size: 18px;
 }
 
 </style>

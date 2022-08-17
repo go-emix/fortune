@@ -17,14 +17,18 @@ let feas = getState().features
 
 let show = ref(featureShow(feas, rou))
 
+const loading = ref(true)
+
 async function setList() {
     let da = await ax({
         url: "system/roleList"
     })
     if (!da) {
+        loading.value = false
         return
     }
     list.value = da
+    loading.value = false
 }
 
 function format(row, col, cell) {
@@ -49,8 +53,12 @@ function openRoleDialog() {
 }
 
 async function newRole() {
-    let pat = /\w+/i
     let name = roleForm.value.name;
+    if (!name) {
+        Nerr(t("name") + " " + t("not_empty"))
+        return
+    }
+    let pat = /\w+/i
     if (!pat.test(name)) {
         Nerr(t("must_be_alphanumeric"))
         return
@@ -189,8 +197,14 @@ watch(locale, function () {
     localFeatures()
 })
 
-const headCellStyle = ref({background: '#8f8fbe', color: 'white'})
+let hcs = {
+    background: '#8f8fbe',
+    color: 'white',
+}
+
+const headCellStyle = ref(hcs)
 const cellStyle = ref({background: '#eef7f5'})
+
 
 setList()
 featureList()
@@ -199,99 +213,121 @@ apiList()
 </script>
 
 <template>
-    <el-button type="success" v-if="show.add" @click="openRoleDialog"
-               class="new">{{ t("new") }}
-    </el-button>
-    <el-table
-        v-if="show.list"
-        :data="list"
-        row-key="id"
-        :header-cell-style="headCellStyle"
-        :cell-style="cellStyle"
-        class="table"
-        stripe>
-        <el-table-column
-            prop="id"
-            label="ID"
-            width="180">
-        </el-table-column>
-        <el-table-column
-            prop="name"
-            :label="t('name')"
-            width="180"
-            :formatter="format">
-        </el-table-column>
-        <el-table-column
-            fixed="right"
-            :label="t('operate')"
-            width="180">
-            <template #default="scope">
-                <el-link v-if="show.feature&&scope.row.name!=='root'" type="primary"
-                         @click="feature(scope.row)" :underline="false">
-                    {{ t('feature') }}
-                </el-link>
-                <el-link v-if="show.feature&&scope.row.name!=='root'" type="danger"
-                         @click="del(scope.row)" :underline="false">
-                    {{ t('delete') }}
-                </el-link>
-                <span v-if="scope.row.name==='root'" style="color: #c8c9cb">{{ t('root_not_edit') }}</span>
-            </template>
-        </el-table-column>
-    </el-table>
+    <div>
+        <el-button type="success" v-if="show.add" @click="openRoleDialog"
+                   class="new" size="large">{{ t("new") }}
+        </el-button>
 
-    <el-dialog v-model="featureDialog" @open="featureDialogOpen"
-               :title="t(featureDialogTitle)">
-        <el-tabs active-name="feature">
-            <el-tab-pane :label="t('feature')" name="feature">
-                <el-tree
-                    ref="feaTree"
-                    :data="allFs"
-                    show-checkbox
-                    node-key="id"
-                    :props="{label:'name'}">
-                </el-tree>
-            </el-tab-pane>
-            <el-tab-pane :label="t('api')" name="api">
-                <el-table
-                    ref="apiMultiple"
-                    :data="apiListRef"
-                    row-key="id"
-                    style="width: 100%"
-                    border>
-                    <el-table-column type="selection" width="55"/>
-                    <el-table-column
-                        prop="id"
-                        label="ID">
-                    </el-table-column>
-                    <el-table-column
-                        prop="name"
-                        :label="t('name')"
-                        :formatter="format">
-                    </el-table-column>
-                    <el-table-column
-                        prop="path"
-                        :label="t('path')">
-                    </el-table-column>
-                    <el-table-column
-                        prop="method"
-                        :label="t('method')">
-                    </el-table-column>
-                </el-table>
-            </el-tab-pane>
-        </el-tabs>
+        <el-table
+            v-if="show.list"
+            :data="list"
+            row-key="id"
+            :header-cell-style="headCellStyle"
+            :cell-style="cellStyle"
+            class="table"
+            stripe
+            max-height="350"
+            v-loading="loading">
+            <el-table-column
+                prop="id"
+                label="ID"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="name"
+                :label="t('name')"
+                width="180"
+                :formatter="format">
+            </el-table-column>
+            <el-table-column
+                fixed="right"
+                :label="t('operate')"
+                width="250"
+                align="center">
+                <template #default="scope">
+                    <div class="operate">
+                        <el-link v-if="show.feature&&scope.row.name!=='root'" type="primary"
+                                 @click="feature(scope.row)" :underline="false"
+                                 style="margin-right: 30px">
+                            {{ t('feature') }}
+                        </el-link>
+                        <el-link v-if="show.feature&&scope.row.name!=='root'" type="danger"
+                                 @click="del(scope.row)" :underline="false">
+                            {{ t('delete') }}
+                        </el-link>
+                        <span v-if="scope.row.name==='root'" style="color: #c8c9cb">
+                            {{ t('root_not_edit') }}</span>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
 
-        <el-button type="primary" @click="saveRole">{{ t("save") }}</el-button>
-    </el-dialog>
 
-    <el-dialog v-model="roleDialog">
-        <el-form :model="roleForm">
-            <el-form-item :label="t('name')">
-                <el-input v-model="roleForm.name" :placeholder="t('must_be_alphanumeric')"/>
-            </el-form-item>
-        </el-form>
-        <el-button type="primary" @click="newRole">{{ t("save") }}</el-button>
-    </el-dialog>
+        <el-dialog v-model="featureDialog" @open="featureDialogOpen"
+                   :title="t(featureDialogTitle)"
+                   custom-class="featureDialog">
+            <el-tabs active-name="feature" class="feature-tab">
+                <el-tab-pane :label="t('feature')" name="feature"
+                             class="el-tab">
+                    <el-scrollbar max-height="220">
+                        <el-tree
+                            ref="feaTree"
+                            :data="allFs"
+                            show-checkbox
+                            node-key="id"
+                            :props="{label:'name'}"
+                            class="feaTree">
+                        </el-tree>
+                    </el-scrollbar>
+                </el-tab-pane>
+                <el-tab-pane :label="t('api')" name="api"
+                             class="el-tab">
+                    <el-table
+                        ref="apiMultiple"
+                        :data="apiListRef"
+                        row-key="id"
+                        style="width: 100%"
+                        border
+                        max-height="270"
+                        :cell-style="cellStyle"
+                        :header-cell-style="{background: '#b4becb',color:'white'}">
+                        <el-table-column type="selection" width="55"/>
+                        <el-table-column
+                            prop="id"
+                            label="ID">
+                        </el-table-column>
+                        <el-table-column
+                            prop="name"
+                            :label="t('name')"
+                            :formatter="format">
+                        </el-table-column>
+                        <el-table-column
+                            prop="path"
+                            :label="t('path')">
+                        </el-table-column>
+                        <el-table-column
+                            prop="method"
+                            :label="t('method')">
+                        </el-table-column>
+                    </el-table>
+                </el-tab-pane>
+            </el-tabs>
 
+            <el-button type="primary" @click="saveRole">{{ t("save") }}</el-button>
+        </el-dialog>
+
+        <el-dialog v-model="roleDialog" custom-class="roleDialog">
+            <el-form :model="roleForm">
+                <el-form-item :label="t('name')" label-width="70px">
+                    <el-input v-model="roleForm.name" class="input"
+                              :placeholder="t('must_be_alphanumeric')"/>
+                </el-form-item>
+            </el-form>
+            <el-button type="primary" @click="newRole"
+                       style="margin-left: 40px;margin-top: 20px">{{ t("save") }}
+            </el-button>
+        </el-dialog>
+    </div>
 </template>
 
 <style scoped>
@@ -299,13 +335,49 @@ apiList()
 .table {
     margin-top: 30px;
     margin-left: 10%;
-    width: 540px;
+    width: 610px;
     background: transparent;
+    border-radius: 8px;
 }
 
 .new {
     margin-left: 10%;
     margin-top: 20px;
-
 }
+
+.operate {
+    text-align: center;
+}
+
+:deep(.roleDialog) {
+    background: #eef7f5;
+    border-radius: 8px;
+    width: 400px;
+    height: 200px;
+}
+
+.input {
+    width: 230px;
+}
+
+:deep(.featureDialog) {
+    background: #eef7f5;
+    border-radius: 8px;
+    width: 500px;
+    height: 480px;
+}
+
+.feaTree {
+    background: #eef7f5;
+    height: 220px;
+}
+
+.el-tab {
+    height: 300px;
+}
+
+.feature-tab {
+    margin-top: -20px;
+}
+
 </style>

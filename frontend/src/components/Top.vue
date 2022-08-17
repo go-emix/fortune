@@ -18,11 +18,11 @@ const admin = ref(getState().admin)
     <div class="temp">
         <span class="span">{{ admin.nickname ? admin.nickname : admin.username }}</span>
         <el-select v-model="locale" @change="syncI18n" class="select">
-            <el-option
-                v-for="item in langs"
-                :key="item.i18n"
-                :label="item.lang"
-                :value="item.i18n">
+            <el-option class="option"
+                       v-for="item in langs"
+                       :key="item.i18n"
+                       :label="item.lang"
+                       :value="item.i18n">
             </el-option>
         </el-select>
         <el-link class="exit" @click="exit" :underline="false">{{ t("exit") }}
@@ -48,6 +48,11 @@ const admin = ref(getState().admin)
 
 .span {
     color: #66b1ff;
+}
+
+:deep(.el-input__inner) {
+    background-color: #494986;
+    color: white;
 }
 
 </style>
