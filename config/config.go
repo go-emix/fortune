@@ -69,7 +69,6 @@ func init() {
 	AppC.Jwt.SignKey = version.Name
 	AppC.Jwt.Expire = 3600
 	AppC.I18n = "conf/i18n"
-	FrontendC.Dist = "frontend/dist"
 }
 
 func GetDb() *gorm.DB {

@@ -4,7 +4,7 @@ import {getState} from "../pkg/session"
 import {useRoute} from "vue-router"
 import {ref} from "vue"
 import ax from "../pkg/axios"
-import {Nerr} from "../pkg/notify"
+import {Nerr, Nwarn} from "../pkg/notify"
 import {featureShow} from "../pkg/utils"
 
 const {t} = useI18n()
@@ -32,6 +32,10 @@ async function setList() {
 }
 
 async function del(row) {
+    let msg = t('delete') + " " + t('lower_admin') + " ?"
+    if (!await Nwarn(msg)) {
+        return
+    }
     await ax({
         url: "system/admin?id=" + row.id,
         method: "delete"

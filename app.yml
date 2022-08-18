@@ -7,3 +7,5 @@ logs:
   - level: debug
     format: text
     outType: console
+frontend:
+  dist: frontend/dist

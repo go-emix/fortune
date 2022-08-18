@@ -49,7 +49,9 @@ func NewServer(port int, frontDist string) *Server {
 			c.Data(http.StatusOK, "text/html;charset=utf-8", file)
 		})
 		ser.eng.Static("assets", frontDist+"/assets")
-		ser.eng.Static("favicon.ico", frontDist+"/favicon.ico")
+		ser.eng.GET("favicon.ico", func(c *gin.Context) {
+			c.File(frontDist + "/favicon.ico")
+		})
 		api := ser.eng.Group("api")
 		router.Register(api)
 	} else {

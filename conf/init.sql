@@ -158,3 +158,11 @@ INSERT INTO front_i18n (name, en, zh)
 VALUES ('clean', 'clean', '清除');
 INSERT INTO front_i18n (name, en, zh)
 VALUES ('fortune', 'FORTUNE', 'FORTUNE');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('warning', 'Warning', '警告');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('cancel', 'Cancel', '取消');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('ok', 'OK', '确认');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('lower_admin', 'admin', '管理员');

@@ -2,7 +2,7 @@
 import {ref, watch} from "vue"
 import {useI18n} from 'vue-i18n'
 import ax from "../pkg/axios"
-import {Nerr} from "../pkg/notify"
+import {Nerr, Nwarn} from "../pkg/notify"
 import {featureShow} from "../pkg/utils";
 import {useRoute} from "vue-router";
 import {getState} from "../pkg/session";
@@ -36,6 +36,10 @@ function format(row, col, cell) {
 }
 
 async function del(row) {
+    let msg = t('delete') + " " + t('lower_role') + " ?"
+    if (!await Nwarn(msg)) {
+        return
+    }
     await ax({
         url: "system/role?id=" + row.id,
         method: "delete"

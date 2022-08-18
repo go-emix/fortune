@@ -46,5 +46,5 @@ logs:
     maxCount: 10
     singleLevel: false
     disabled: true
-frontend:
-  dist: frontend/dist
+#frontend:
+#  dist:
