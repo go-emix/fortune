@@ -55,20 +55,9 @@ async function login() {
     }
 }
 
-async function tq() {
-    let da = await ax({
-        url: "system/tq",
-    })
-    if (!da) {
-        return
-    }
-    Nsucc(da)
-}
-
 function clean() {
     form.value = {}
 }
-
 
 </script>
 
@@ -99,7 +88,6 @@ function clean() {
                         :value="item.i18n">
                     </el-option>
                 </el-select>
-                <el-button @click="tq">{{ t("tq") }}</el-button>
             </div>
         </el-main>
     </el-container>
@@ -122,15 +110,13 @@ function clean() {
 }
 
 .div {
+    text-align: center;
     width: 460px;
     margin: -40px auto auto;
-    padding-left: 10%;
 }
 
 .select {
     width: 80px;
-    margin-right: 30px;
-    margin-left: 12%;
 }
 
 .form {

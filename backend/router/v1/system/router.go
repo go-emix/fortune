@@ -8,7 +8,6 @@ import (
 func Register(r gin.IRouter) {
 	gr := r.Group("system")
 	gr.POST("login", system.Login)
-	gr.GET("tq", system.Tianqi)
 	gr.GET("i18n", system.I18n)
 
 	// 查询管理员的菜单
