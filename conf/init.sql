@@ -166,3 +166,5 @@ INSERT INTO front_i18n (name, en, zh)
 VALUES ('ok', 'OK', '确认');
 INSERT INTO front_i18n (name, en, zh)
 VALUES ('lower_admin', 'admin', '管理员');
+INSERT INTO front_i18n (name, en, zh)
+VALUES ('preview_not_delete', 'preview not delete', '预览版不可删除');

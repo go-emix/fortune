@@ -196,10 +196,12 @@ roleList()
                                  style="margin-right: 30px">
                             {{ t('edit') }}
                         </el-link>
-                        <el-link type="danger" v-if="show.delete"
+                        <el-link type="danger" v-if="scope.row.username!=='ad'&& show.delete"
                                  @click="del(scope.row)" :underline="false">
                             {{ t('delete') }}
                         </el-link>
+                        <span v-if="scope.row.username==='ad'" style="color: #c8c9cb">
+                            {{ t('preview_not_delete') }}</span>
                     </div>
                 </template>
             </el-table-column>
