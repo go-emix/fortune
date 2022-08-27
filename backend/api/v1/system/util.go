@@ -31,3 +31,11 @@ func I18n(c *gin.Context) {
 		"en": en,
 	})
 }
+
+func GetUid(c *gin.Context) int {
+	get, ok := c.Get("uid")
+	if ok {
+		return get.(int)
+	}
+	return 0
+}

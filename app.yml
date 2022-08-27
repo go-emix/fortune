@@ -7,5 +7,6 @@ logs:
   - level: debug
     format: text
     outType: console
+#    singleLevel: true
 frontend:
   dist: frontend/dist
