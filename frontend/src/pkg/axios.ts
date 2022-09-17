@@ -9,16 +9,16 @@ const t = i18n.global.t
 const env = import.meta.env
 
 let instance = ax.create({
-    baseURL: env.VITE_API_PATH,
+    baseURL: <string>env.VITE_API_PATH,
     timeout: 2500,
 })
 
 instance.interceptors.request.use(function (config) {
     let token = isLogin()
     if (token) {
-        config.headers["token"] = token
+        config.headers!["token"] = token
     }
-    config.headers["lang"] = String(i18n.global.locale)
+    config.headers!["lang"] = String(i18n.global.locale)
     return config
 }, function (error) {
     Nerr(error)

@@ -24,7 +24,7 @@ await menu(router)
 await feature()
 
 router.beforeEach(function (to, from, next) {
-    let au = to.meta.auth
+    let au = <string>to.meta.auth
     if (!au) {
         next()
         return

@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/js-cookie": "^3.0.2",
     "axios": "^0.26.1",
     "element-plus": "^2.1.8",
     "js-cookie": "^3.0.1",
@@ -17,6 +18,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.0",
-    "vite": "^2.9.0"
+    "typescript": "^4.6.4",
+    "vite": "^2.9.0",
+    "vue-tsc": "^0.40.4"
   }
 }

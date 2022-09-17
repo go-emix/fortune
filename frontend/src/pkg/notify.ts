@@ -3,18 +3,18 @@ import i18n from './i18n'
 
 const t = i18n.global.t
 
-const duration = 1500
-const duration2 = 2000
+const duration: number = 1500
+const duration2: number = 2000
 
-export function Nerr(msg) {
+export function Nerr(msg: string): void {
     ElMessage({
         message: msg,
         type: 'error',
-        duration2
+        duration: duration2
     })
 }
 
-export function Nsucc(msg) {
+export function Nsucc(msg: string): void {
     ElMessage({
         message: msg,
         type: 'success',
@@ -29,7 +29,7 @@ let style = {
     height: "130px",
 }
 
-export async function Nwarn(msg) {
+export async function Nwarn(msg: string): Promise<boolean> {
     try {
         await ElMessageBox.confirm(
             msg,
@@ -42,6 +42,6 @@ export async function Nwarn(msg) {
             })
         return true
     } catch (e) {
-        return false
     }
+    return false
 }

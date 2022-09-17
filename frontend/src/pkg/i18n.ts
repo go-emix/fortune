@@ -29,10 +29,10 @@ function getLocale() {
     if (!state) {
         return 'zh'
     }
-    if (state.i18n) {
-        return state.i18n
+    if (state.i18n === "") {
+        return 'zh'
     }
-    return 'zh'
+    return state.i18n
 }
 
 export default createI18n({

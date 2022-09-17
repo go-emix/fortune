@@ -7,8 +7,9 @@ import NotFound from "../components/NotFound.vue"
 import Role from "../components/Role.vue"
 import Main from "../components/Main.vue"
 import {saveState} from "./session"
+import {Router, RouteRecordName} from "vue-router";
 
-export default async function init(router) {
+export default async function init(router: Router) {
     if (!isLogin()) {
         router.addRoute({
             path: '/:pathMatch(.*)*',
@@ -22,7 +23,7 @@ export default async function init(router) {
         })
         return
     }
-    const menu = await ax({
+    const menu = <any>await ax({
         url: "system/menus",
     })
     if (!menu) {
@@ -31,7 +32,7 @@ export default async function init(router) {
     saveState({menus: menu})
     let routes = router.getRoutes()
     for (let i = 0; i < routes.length; i++) {
-        router.removeRoute(routes[i].name)
+        router.removeRoute(<RouteRecordName>routes[i].name)
     }
     router.addRoute({
         name: "login", path: "/login",
@@ -55,13 +56,14 @@ export default async function init(router) {
                 menu[i].meta = {id: menu[i].id}
                 menu[i].meta.auth = au
             }
+            // @ts-ignore
             main.children.push(menu[i])
         }
     }
     router.addRoute(main)
 }
 
-function toVueComponent(com) {
+function toVueComponent(com: string) {
     switch (com) {
         case "admin":
             return Admin
