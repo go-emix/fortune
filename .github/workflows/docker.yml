@@ -2,6 +2,8 @@ name: publish docker-registry
 
 on:
   push:
+    branches:
+      - preview
     paths-ignore:
       - docker-compose.yml
       - .env
