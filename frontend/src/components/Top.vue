@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {useI18n} from 'vue-i18n'
 import {langs} from '../pkg/i18n'
 import {exit, getState, saveState} from "../pkg/session"
@@ -6,11 +6,11 @@ import {ref} from "vue";
 
 const {t, locale} = useI18n()
 
-function syncI18n(va) {
+function syncI18n(va: string) {
     saveState({i18n: va})
 }
 
-const admin = ref(getState().admin)
+const admin = ref(getState()?.admin)
 
 </script>
 

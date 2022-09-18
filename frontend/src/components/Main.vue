@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {RouterView} from 'vue-router'
 import Top from './Top.vue'
 import Left from './Left.vue'

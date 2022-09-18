@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import {ref} from 'vue'
 import {useI18n} from 'vue-i18n'
 import {useRoute, useRouter} from "vue-router"
-import {getState} from "../pkg/session"
+import {getState, State} from "../pkg/session"
 
 let rou = useRoute();
 let active = ref(rou.name)
@@ -11,14 +11,14 @@ const router = useRouter();
 
 const {t} = useI18n()
 
-function select(k) {
+function select(k: string) {
     router.push({name: k})
 }
 
-let show = ref({})
+let show = <any>ref({})
 
 function setShow() {
-    let state = getState()
+    let state = <State>getState()
     let ln = state.menus.length
     for (let i = 0; i < ln; i++) {
         show.value[state.menus[i].name] = true

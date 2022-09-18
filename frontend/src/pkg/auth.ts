@@ -1,4 +1,4 @@
-import {exit, getState} from "./session"
+import {getState} from "./session"
 
 export function isLogin(): boolean | string {
     let state = getState();
@@ -11,9 +11,6 @@ export function isLogin(): boolean | string {
 export function isPermit(to: string): boolean {
     let menus = getState()!.menus;
     let ln = menus.length
-    if (ln === 0) {
-        exit()
-    }
     for (let i = 0; i < ln; i++) {
         let m = menus[i]
         if (m.auth === to) {

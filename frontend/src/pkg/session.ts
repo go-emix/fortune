@@ -90,8 +90,8 @@ export function saveState(obj: any) {
 
 export function getState(): State | null {
     try {
-        let sta: string | undefined = Cookies.get("state");
-        if (typeof sta === "string") {
+        let sta: string = <string>Cookies.get("state");
+        if (sta) {
             return JSON.parse(sta)
         }
     } catch (e) {
