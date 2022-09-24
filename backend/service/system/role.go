@@ -14,6 +14,10 @@ func RoleList() (rs []Role, err error) {
 
 func UpdateRoleFeatures(roleId int, fids []int) (err error) {
 	err = common.DB.Transaction(func(tx *gorm.DB) (err error) {
+		err = common.DB.First(&Role{Id: roleId}).Error
+		if err != nil {
+			return
+		}
 		if len(fids) == 0 {
 			err = common.DB.Where("role=?", roleId).Unscoped().Delete(RoleMenu{}).Error
 			if err != nil {
@@ -90,7 +94,7 @@ func ApiList() (rs []Api, err error) {
 func UpdateRoleApis(roleId int, aids []int) (err error) {
 	err = common.DB.Transaction(func(tx *gorm.DB) (err error) {
 		role := Role{Id: roleId}
-		err = common.DB.Find(&role).Error
+		err = common.DB.First(&role).Error
 		if err != nil {
 			return
 		}
