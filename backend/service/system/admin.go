@@ -15,7 +15,7 @@ func Login(c *gin.Context, param LoginParam) (succ LoginSucc, ierr *i18n.Error) 
 	var u Admin
 	var err error
 	err = common.DB.Model(Admin{}).Where("username=?",
-		param.Username).Find(&u).Error
+		param.Username).First(&u).Error
 	if err != nil {
 		ierr = i18n.NewErr(c, "", err)
 		return
