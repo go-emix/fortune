@@ -4,7 +4,7 @@ WORKDIR /go/src/fortune
 
 COPY . .
 
-ENV GOPROXY https://goproxy.io,direct
+ENV GOPROXY https://proxy.golang.com.cn,direct
 
 RUN go get
 
@@ -20,7 +20,7 @@ COPY --from=build /go/src/fortune/fortune  /opt/fortune/fortune
 COPY --from=build /go/src/fortune/conf  /opt/fortune/conf
 COPY --from=build /go/src/fortune/frontend  /opt/fortune/frontend
 
-RUN apt update
+#RUN sed -i 's#http://archive.ubuntu.com#http://mirrors.aliyun.com#g' /etc/apt/sources.list
 
 RUN apt install -y --no-install-recommends ca-certificates curl
 
