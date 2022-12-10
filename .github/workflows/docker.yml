@@ -2,20 +2,35 @@ name: publish docker-registry
 
 on:
   push:
+    branches:
+      - preview
     paths-ignore:
       - docker-compose.yml
       - .env
+
+env:
+  IMAGE_NAME: fortune
+  USERNAME: ${{secrets.DOCKER_REGISTRY_USERNAME}}
+  PASSWORD: ${{secrets.DOCKER_REGISTRY_PASSWORD}}
+  REGISTRY: www.takujo.cn:5000
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: publish to docker-registry
-        uses: elgohr/Publish-Docker-Github-Action@master
-        with:
-          name: fortune
-          username: ${{secrets.DOCKER_REGISTRY_USERNAME}}
-          password: ${{secrets.DOCKER_REGISTRY_PASSWORD}}
-          tags: latest
-          registry: www.takujo.cn:5000
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: docker login
+        run: |
+          sudo cp www.takujo.cn.cer /etc/ssl/certs/
+          docker login $REGISTRY -u $USERNAME -p $PASSWORD
+      - name: docker build
+        run: docker build -t $IMAGE_NAME .
+      - name: docker push
+        run: |
+          docker tag $IMAGE_NAME $REGISTRY/$IMAGE_NAME
+          docker push $REGISTRY/$IMAGE_NAME
+      - name: clean
+        run: |
+          docker logout
+          sudo rm /etc/ssl/certs/www.takujo.cn.cer
