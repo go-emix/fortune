@@ -12,7 +12,7 @@ env:
   IMAGE_NAME: fortune
   USERNAME: ${{secrets.DOCKER_REGISTRY_USERNAME}}
   PASSWORD: ${{secrets.DOCKER_REGISTRY_PASSWORD}}
-  REGISTRY: www.takujo.cn:5000
+  REGISTRY: www.takujo.cn
 
 jobs:
   build:
