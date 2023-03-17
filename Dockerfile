@@ -4,7 +4,7 @@ WORKDIR /go/src/fortune
 
 COPY . .
 
-ENV GOPROXY https://proxy.golang.com.cn,direct
+ENV GOPROXY https://goproxy.cn,direct
 
 RUN go get
 
