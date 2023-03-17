@@ -22,7 +22,6 @@ jobs:
         uses: actions/checkout@v3
       - name: docker login
         run: |
-          sudo cp www.takujo.cn.cer /etc/ssl/certs/
           docker login $REGISTRY -u $USERNAME -p $PASSWORD
       - name: docker build
         run: docker build -t $IMAGE_NAME .
@@ -33,4 +32,3 @@ jobs:
       - name: clean
         run: |
           docker logout
-          sudo rm /etc/ssl/certs/www.takujo.cn.cer
