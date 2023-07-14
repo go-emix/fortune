@@ -262,7 +262,7 @@ roleList()
                         v-model="adminForm.rids"
                         multiple
                         :placeholder="t('lower_role')"
-                        class="input">
+                        class="input" :disabled="adminForm.username==='ad'">
                         <el-option
                             v-for="item in roles"
                             :key="item.id"
