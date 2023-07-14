@@ -6,9 +6,9 @@ COPY . .
 
 ENV GOPROXY https://goproxy.cn,direct
 
-RUN go get
+RUN go mod tidy
 
-RUN go build
+RUN CGO_ENABLED=0 go build
 
 FROM ubuntu:20.04
 
