@@ -10,7 +10,7 @@ RUN go mod tidy
 
 RUN CGO_ENABLED=0 go build
 
-FROM ubuntu:20.04
+FROM ubuntu
 
 WORKDIR /opt/fortune
 
