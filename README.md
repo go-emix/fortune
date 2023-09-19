@@ -4,7 +4,7 @@
 
 ### 后台管理系统
 
-测试账号 ad 密码123
+测试账号 ad 密码123456
 
 [在线预览](https://www.takujo.cn/fortune)
 
